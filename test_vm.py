@@ -99,7 +99,7 @@ class TestInstallVm:
 
         print(f"Missing: {missing_platforms}")
         for index, target_platform in missing_platforms:
-            assert(len(isos) > index)
+            assert len(isos) > index, f"No ISO is specified for the missing {target_platform}"
             self.__install_machine(isos[index], target_platform.os, target_platform.architecture)
             
             

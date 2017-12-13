@@ -8,16 +8,6 @@ import re
 
 
 def pytest_addoption(parser):
-    # TODO add --kernels specify a file containing list of kernels
-     
-    #TODO More choices: check_environment, dry_run, install 
-    parser.addoption("--iso", 
-                     action="append", 
-                     type="string",
-                     dest="iso",
-                     default=None,
-                     metavar="ISO",
-                     help="ISO file or url for download. ISOs should be specified in the same order as --os. This option can be used more than once")
 
     parser.addoption("--os", 
                      action="append", 
@@ -27,6 +17,15 @@ def pytest_addoption(parser):
                      default=[],
                      choices=['win8:64', 'win10:64', 'win8', 'win10', "win8:32", "win10:32"],
                      help="Target OS. This option can be used more than once")
+    
+    parser.addoption("--iso", 
+                     action="append", 
+                     type="string",
+                     dest="iso",
+                     default=None,
+                     metavar="ISO",
+                     help="ISO file for installation of missing operating systems. ISOs should be specified in the same order as --os. This option can be used more than once")
+
     
 TargetPlatform = namedtuple('TargetPlatform', ['os', 'architecture'])
 TargetPlatforms = []
