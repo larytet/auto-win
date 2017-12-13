@@ -73,10 +73,7 @@ class TestInstallVm:
             
             
                     
-    def __install_machine(self, isos, os, architecture):
-        assert(len(isos))
-        iso = self.__find_iso(isos, os, architecture)
-        assert(iso != None)
+    def __install_machine(self, iso, os, architecture):
         
         self.__patch_iso(iso, os, architecture)
         
@@ -94,12 +91,16 @@ class TestInstallVm:
         '''
         missing_platforms = []
         print(target_platforms)
+        index = 0
         for target_platform in target_platforms:
             if not self.__vm_presents(target_platform.os, target_platform.architecture):
-                missing_platforms.append(target_platform)
+                missing_platforms.append((index, target_platform))
+            index += 1
+
         print(f"Missing: {missing_platforms}")
-        for target_platform in missing_platforms:
-            self.__install_machine(isos, target_platform.os, target_platform.architecture)
+        for index, target_platform in missing_platforms:
+            assert(len(isos) > index)
+            self.__install_machine(isos[index], target_platform.os, target_platform.architecture)
             
             
             

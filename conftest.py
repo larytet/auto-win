@@ -17,7 +17,7 @@ def pytest_addoption(parser):
                      dest="iso",
                      default=None,
                      metavar="ISO",
-                     help="ISO file or url for download. This option can be used more than once")
+                     help="ISO file or url for download. ISOs should be specified in the same order as --os. This option can be used more than once")
 
     parser.addoption("--os", 
                      action="append", 
@@ -65,3 +65,5 @@ def isos(request):
     if not iso_path:
         iso_path = []
     return iso_path
+
+
