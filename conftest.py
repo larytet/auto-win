@@ -23,30 +23,32 @@ def pytest_addoption(parser):
                      type="string",
                      dest="targets",
                      metavar="TARGETS",
-                     default=['win8'],
-                     choices=['win8', 'win10'],
+                     default=['win8:64'],
+                     choices=['win8:64', 'win10:64', 'win8', 'win10', "win8:32", "win10:32"],
                      help="Target OS. This option can be used more than once")
     
-    parser.addoption("--architecture", 
-                     action="append", 
-                     type="string",
-                     dest="architectures",
-                     metavar="ARCHITECTURES",
-                     default=['64'],
-                     choices=['32', '64'],
-                     help="32 or 64 bits. This option can be used more than once")
+TargetPlatform = namedtuple('TargetPlatform', ['os', 'architecture'])
+target_platforms = []
     
 def pytest_configure(config):
     iso_path = config.getoption("--iso")
     if iso_path:
         print(f"Using ISO {iso_path}")
 
+    for target_name in config.targets:
+        target_name = target_name.lower().strip()
+        if ":" in target_name:
+            os, architecture = target_name.split(":")
+        else:
+            architecture = "64"
+            os = target_name
+        assert(architecture in ["32", "64"])
+        assert(os in ["win8", "win10"])
+        target_platforms.append(TargetPlatform(os, architecture))
+            
+
+
 @pytest.fixture
 def target_os(request):
-    return request.config.targets
-
-
-@pytest.fixture
-def architecture(request):
-    return request.config.architectures
-
+        return target_platforms
+    

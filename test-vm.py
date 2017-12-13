@@ -16,7 +16,8 @@ class TestInstallVm:
     Get lits of the installed VMs, install missing VMs if neccessary
     '''
     
-    def test_installed_machines(self):
+    def test_installed_machines(self, target_platforms):
         '''
         Collect list of missing VMs
         '''
+        print(target_platforms)
