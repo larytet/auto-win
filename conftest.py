@@ -33,9 +33,9 @@ target_platforms = []
 def pytest_configure(config):
     iso_path = config.getoption("--iso")
     if iso_path:
-        print(f"Using ISO {iso_path}")
+        print("Using ISO {iso_path}")
 
-    for target_name in config.targets:
+    for target_name in config.getoption("--os"):
         target_name = target_name.lower().strip()
         if ":" in target_name:
             os, architecture = target_name.split(":")
