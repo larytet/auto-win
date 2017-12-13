@@ -24,7 +24,7 @@ def pytest_addoption(parser):
                      type="string",
                      dest="target",
                      metavar="TARGET",
-                     default=['win8:64'],
+                     default=[],
                      choices=['win8:64', 'win10:64', 'win8', 'win10', "win8:32", "win10:32"],
                      help="Target OS. This option can be used more than once")
     
@@ -36,6 +36,11 @@ def pytest_configure(config):
     if iso_path:
         print(f"Using ISO {iso_path}")
 
+    targets = config.getoption("--os")
+    if len(targets):
+        print(f"Running for {targets}")
+    else:
+        targets = ["win8:64"]
     for target_name in config.getoption("--os"):
         target_name = target_name.lower().strip()
         if ":" in target_name:
