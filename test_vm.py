@@ -74,6 +74,7 @@ class TestInstallVm:
             
                     
     def __install_machine(self, isos, os, architecture):
+        assert(len(isos))
         iso = self.__find_iso(isos, os, architecture)
         assert(iso != None)
         

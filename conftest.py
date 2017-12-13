@@ -62,4 +62,6 @@ def target_platforms(request):
 @pytest.fixture
 def isos(request):
     iso_path = request.config.getoption("--iso")
+    if not iso_path:
+        iso_path = []
     return iso_path
