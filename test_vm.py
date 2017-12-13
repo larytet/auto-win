@@ -11,18 +11,31 @@ import re
 from collections import namedtuple
 import threading
 import virtualbox
-from platform import architecture
 
 class TestInstallVm:
     '''
     Get lits of the installed VMs, install missing VMs if neccessary
     '''
     
-    def __create_vm_name(self, os, architecture):
-        return f"test.{os}.{architecture}"
+    def __get_vm_name(self, os, architecture):
+        return f"{os}.{architecture}"
+
+    def __get_vm_group(self):
+        return "test"
+    
+    def __get_vm_path(self, os, architecture):
+        vbox = virtualbox.VirtualBox()
+        machine_name = self.__get_vm_name(os, architecture)
+        return vbox.compose_machine_filename(machine_name, self.__get_vm_group())
+        '''
+        machine_folder = vbox.system_properties().default_machine_folder()
+        machine_path = os.path.join(machine_folder, machine_name)
+        return machine_path
+        '''
     
     def __vm_presents(self, os, architecture):
-        vm_name = self.__create_vm_name(os, architecture)
+        vm_name = self.__get_vm_name(os, architecture)
+        # returns IVirtualBox (?)
         vbox = virtualbox.VirtualBox()
         # Call to vbox.find_machine(vm_name) fails for unknown reason
         # I run a loop instead
@@ -48,10 +61,29 @@ class TestInstallVm:
         '''
         pass
     
+    def __find_machine_type(self, os, architecture):
+        # Dictionary which translates my OS target to vbox.guest_os_types.description
+        machine_types = {"win8":"Windows 8", "win10":"Windows 10"}
+        machine_type = machine_types[os]
+        vbox = virtualbox.VirtualBox()
+        for os_type in vbox.guest_os_types: 
+            if machine_type in os_type.description and architecture in os_type.description:
+                return machine_type
+        return None
+            
+            
+                    
     def __install_machine(self, isos, os, architecture):
         iso = self.__find_iso(isos, os, architecture)
         assert(iso != None)
+        
         self.__patch_iso(iso, os, architecture)
+        
+        machine_path = self.__get_vm_path(os, architecture)
+        machine_name = self.__get_vm_name(os, architecture)
+        os_type_id = self.__find_machine_type(os, architecture)
+        vbox = virtualbox.VirtualBox()
+        machine = vbox.create_machine(machine_path, machine_name, self.__get_vm_group(), os_type_id)
         
         
     def test_installed_machines(self, target_platforms, isos):
