@@ -24,10 +24,13 @@ class TestInstallVm:
     def __vm_presents(self, os, architecture):
         vm_name = self.__create_vm_name(os, architecture)
         vbox = virtualbox.VirtualBox()
+        return vbox.find_machine(vm_name)
+        '''
         for vm in vbox.machines:
             if vm_name == vm.name:
                 return True;
         return False
+        '''
             
         
     def __find_iso(self, isos, os, architecture):
