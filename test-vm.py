@@ -18,11 +18,11 @@ class TestInstallVm:
     Get lits of the installed VMs, install missing VMs if neccessary
     '''
     
-    def create_vm_name(self, os, architecture):
+    def __create_vm_name(self, os, architecture):
         return f"{os}.{architecture}"
     
-    def vm_presents(self, os, architecture):
-        vm_name = create_vm_name(os, architecture)
+    def __vm_presents(self, os, architecture):
+        vm_name = __create_vm_name(os, architecture)
         vbox = virtualbox.VirtualBox()
         for vm in vbox.machines:
             if vm_name == vm.name:
@@ -36,5 +36,5 @@ class TestInstallVm:
         '''
         print(target_platforms)
         for target_platform in target_platforms:
-            assert(vm_presents(target_platform.os, target_platform.architecture))
+            assert(__vm_presents(target_platform.os, target_platform.architecture))
         pass
