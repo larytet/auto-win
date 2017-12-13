@@ -84,6 +84,7 @@ class TestInstallVm:
         os_type_id = self.__find_machine_type(os, architecture)
         vbox = virtualbox.VirtualBox()
         machine = vbox.create_machine(machine_path, machine_name, self.__get_vm_group(), os_type_id)
+        vbox.register_machine(machine)
         
         
     def test_installed_machines(self, target_platforms, isos):
