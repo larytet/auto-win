@@ -29,7 +29,7 @@ def pytest_addoption(parser):
                      help="Target OS. This option can be used more than once")
     
 TargetPlatform = namedtuple('TargetPlatform', ['os', 'architecture'])
-target_platforms = []
+TargetPlatforms = []
     
 def pytest_configure(config):
     iso_path = config.getoption("--iso")
@@ -45,9 +45,12 @@ def pytest_configure(config):
             os = target_name
         assert(architecture in ["32", "64"])
         assert(os in ["win8", "win10"])
-        target_platforms.append(TargetPlatform(os, architecture))
+        TargetPlatforms.append(TargetPlatform(os, architecture))
+
+    if not len(TargetPlatforms):
+        TargetPlatforms.append(TargetPlatform("win8", "64"))
 
 @pytest.fixture
-def target_os(request):
-        return target_platforms
+def target_platforms(request):
+        return TargetPlatforms
     

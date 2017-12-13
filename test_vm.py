@@ -22,7 +22,7 @@ class TestInstallVm:
         return f"{os}.{architecture}"
     
     def __vm_presents(self, os, architecture):
-        vm_name = __create_vm_name(os, architecture)
+        vm_name = self.__create_vm_name(os, architecture)
         vbox = virtualbox.VirtualBox()
         for vm in vbox.machines:
             if vm_name == vm.name:
@@ -36,5 +36,5 @@ class TestInstallVm:
         '''
         print(target_platforms)
         for target_platform in target_platforms:
-            assert(__vm_presents(target_platform.os, target_platform.architecture))
+            assert(self.__vm_presents(target_platform.os, target_platform.architecture))
         pass
