@@ -30,11 +30,17 @@ class TestInstallVm:
         return False
             
         
-    def test_installed_machines(self, target_platforms):
+    def __install_machine(self, os, architecture):
+        
+    def test_installed_machines(self, target_platforms, isos):
         '''
         Collect list of missing VMs
         '''
+        missing_platforms = []
         print(target_platforms)
         for target_platform in target_platforms:
-            assert(self.__vm_presents(target_platform.os, target_platform.architecture))
-        pass
+            if not self.__vm_presents(target_platform.os, target_platform.architecture):
+                missing_platforms.append(target_platform)
+        print(f"Missing: {missing_machines}")
+        for target_platform in missing_platforms:
+            self.__install_machine(target_platform.os, target_platform.architecture)

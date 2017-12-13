@@ -58,4 +58,8 @@ def pytest_configure(config):
 @pytest.fixture
 def target_platforms(request):
         return TargetPlatforms
-    
+
+@pytest.fixture
+def isos(request):
+    iso_path = request.config.getoption("--iso")
+    return iso_path
