@@ -65,7 +65,7 @@ class VirtualBox():
         return os_types
     
     def create_machine(self, path, name, type):
-        arguments = f"createvm –name '{name}' –ostype {type} –register"
+        arguments = f"createvm --name '{name}' --ostype {type} --register"
         lines = self.__run_command(arguments, True)
         return name
         
