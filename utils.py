@@ -14,7 +14,9 @@ def run_shell_command(command, log_prompt=None, lines=None):
     '''
     print("Execute '{0}'".format(command))
     p = subprocess.Popen(["bash", "-c", command], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    process_ended = False
     while True:
+        process_ended = p.poll() is not None
         nextline = p.stdout.readline()
         if nextline != ""  and log_prompt:
             sys.stdout.write("{1}:{0}".format(nextline.decode('UTF-8'), log_prompt))
@@ -25,7 +27,7 @@ def run_shell_command(command, log_prompt=None, lines=None):
             #print("Line '{0}' appended to the list".format(nextline))
             lines.append(nextline)
 
-        if p.poll() is not None:
+        if process_ended:
             break
     exitcode = p.wait()
     
@@ -42,7 +44,7 @@ def executable_exists(name):
 
 def get_connected_network_adapter():
     lines = []
-    run_shell_command("ifconfig", None, lines)
+    run_shell_command("ifconfig", "ifconfig", lines)
     adapter_name = None
     ip_address = None
     for line in lines:
