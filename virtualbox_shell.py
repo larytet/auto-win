@@ -4,6 +4,12 @@
 
 import os
 from collections import namedtuple
+import re
+import utils
+import collections
+
+Machine = collections.namedtuple("Machine", ["name"])
+OS_Type = collections.namedtuple("OS_Type", ["description", "id"])
 
 class VirtualBox():
     '''
@@ -14,5 +20,56 @@ class VirtualBox():
     def __init__(self):
         pass
     
+    def is_ready(self):
+        return utils.executable_exists("VBoxManage")
     
-     
+    def default_machine_folder(self):
+        home = os.path.expanduser("~")
+        return os.path.join(home, "VirtualBox")
+
+    def __run_command(self, arguments):
+        lines = []
+        command = "VBoxManage "+arguments 
+        res = utils.run_shell_command(command, True, lines)
+        assert res, f"Failed to run {command}"
+        return lines
+            
+    def machines(self):
+        lines = self.__run_command("list vms")
+        existing_machines = []
+        for line in lines:
+            line = line.stip()
+            m = re.match('"(\S+)" \S+', line)
+            if m:
+                machine_name = m.group(1)
+                existing_machines.append(Machine(machine_name))
+        return existing_machines
+    
+    def guest_os_types(self):
+        lines = self.__run_command("list ostypes")
+        os_types = []
+        
+        os_id = None
+        os_description = None
+        for line in lines:
+            line = line.stip()
+            m = re.match('ID: (/S+)', line)
+            if m and not os_id and not os_description:
+                os_id = m.group(1)
+            m = re.match('Description: (/S+)', line)
+            if m and os_id and not os_description:
+                os_description = m.group(1)
+                os_types.append(OS_Type(os_description, os_id))
+                os_id = None
+                os_description = None
+
+        return os_types
+    
+    def create_machine(self, path, name, type):
+        arguments = f"createvm –name '{name}' –ostype {type} –register"
+        lines = self.__run_command(arguments)
+        return name
+        
+    def register_machine(self, name):
+        pass
+
