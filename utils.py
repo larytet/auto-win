@@ -4,6 +4,7 @@
 
 import subprocess
 import sys
+import re
 
 def run_shell_command(command, log_prompt=None, lines=None):
     '''
@@ -38,3 +39,22 @@ def run_shell_command(command, log_prompt=None, lines=None):
 def executable_exists(name):
     result = run_shell_command("which {0}".format(name))
     return result
+
+def get_connected_network_adapter():
+    lines = []
+    run_shell_command("ifconfig", None, lines)
+    adapter_name = None
+    ip_address = None
+    for line in lines:
+        m = re.match('^(.+): flags=.+', line)
+        if m and not adapter_name and not ip_address:
+            adapter_name = m.group(1)
+        m = re.match('\s+inet (.+) .+', line)
+        if m and adapter_name and not ip_address:
+            ip_address = m.group(1)
+            if ip_address != "127.0.0.1":
+                return True, adapter_name, ip_address
+            adapter_name = None
+            ip_address = None
+            
+    return False, None, None 

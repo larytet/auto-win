@@ -78,6 +78,8 @@ class TestInstallVm:
         assert res, f"Failed to create {machine_name}"
         print(f"Created machine {machine_name} uuid={machine_uuid} in {machine_settings_file}")
         vbox.register_machine(machine_uuid)
+        memory = 1024
+        vbox.set_machine(machine_uuid, memory, adapter)
         
     def test_virtual_box(self):
         assert virtualbox_shell.VirtualBox().is_ready(), "No VBoxManage in the path?"
