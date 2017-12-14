@@ -74,9 +74,10 @@ class TestInstallVm:
         machine_name = self.__get_vm_name(os, architecture)
         os_type_id = self.__find_machine_type(os, architecture)
         vbox = virtualbox_shell.VirtualBox()
-        res, machine = vbox.create_machine(machine_path, machine_name, os_type_id)
+        res, machine_uuid = vbox.create_machine(machine_path, machine_name, os_type_id)
         assert res, f"Failed to create {machine_name}"
-        vbox.register_machine(machine)
+        print(f"Created machine {machine_uuid}")
+        vbox.register_machine(machine_uuid)
         
     def test_virtual_box(self):
         assert virtualbox_shell.VirtualBox().is_ready(), "No VBoxManage in the path?"
