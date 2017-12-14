@@ -80,7 +80,7 @@ class TestInstallVm:
         vbox.register_machine(machine_uuid)
         res, adapter_name, _ = utils.get_connected_network_adapter()
         assert res, "I did not find any connected network adapters on the host machine"
-        memory = 1024
+        memory = 2*1024
         vbox.set_machine(machine_uuid, memory, adapter_name)
         
     def test_virtual_box(self):

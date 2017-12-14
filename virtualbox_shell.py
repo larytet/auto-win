@@ -83,6 +83,10 @@ class VirtualBox():
                 return True, uuid, settings_file
 
         return False, None 
+    
+    def set_machine(self, machine_uuid, memory, adapter_name):
+        arguments = f"modifyvm {machine_uuid} --memory {memory} --acpi on --nic1 bridged --nictype1 82540EM --bridgeadapter1 {adapter_name}"
+        lines = self.__run_command(arguments, True)
         
     def register_machine(self, name):
         pass
