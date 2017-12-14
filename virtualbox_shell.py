@@ -87,8 +87,19 @@ class VirtualBox():
     
     def set_machine(self, uuid, memory, adapter_name):
         arguments = f"modifyvm {uuid} --memory {memory} --acpi on --nic1 bridged --nictype1 82540EM --bridgeadapter1 {adapter_name}"
-        lines = self.__run_command(arguments, True)
+        self.__run_command(arguments, True)
         
+    def add_hard_disk(self, uuid, cd_rom):
+        # Create vmdk image
+        arguments = f"internalcommands createrawvmdk --filename thinox1.vmdk --rawdisk <abspath>/thinox.raw"
+        self.__run_command(arguments, True)
+        # Add hard disk controller
+        #VBoxManage storagectl “Thinox1” –name “IDE Controller” –add ide –controller PIIX4
+        # Attach disk to the VM
+        #VBoxManage storageattach “Thinox1” –storagectl “IDE Controller” –port 0 –device 0 –type hdd –medium thinox1.vmdk
+        # attach boot disk
+        # VBoxManage.exe storageattach “Thinox1” –storagectl “IDE Controller” –port 0 –device 0 –type dvddrive –medium <iso path>
+                
     def register_machine(self, name):
         pass
 

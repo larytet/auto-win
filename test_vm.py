@@ -85,7 +85,7 @@ class TestInstallVm:
         assert res, "I did not find any connected network adapters on the host machine"
         print(f"I am going to use network adapter {adapter_name}, {ip_address}")
         
-    def test_installed_machines(self, target_platforms, isos):
+    def test_install_machines(self, target_platforms, isos):
         '''
         Collect list of missing VMs
         '''
@@ -115,7 +115,7 @@ class TestInstallVm:
             presents, machine = self.__vm_presents(os, architecture)
             assert presents, f"Failed to find machine {os} {architecture}"           
             vbox.set_machine(machine.uuid, memory, adapter_name)
+
             
-    def test_setup_machines(self, target_platforms):
-        self.__setup_machines(target_platforms)
+            
             
