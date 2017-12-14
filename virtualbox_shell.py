@@ -8,7 +8,7 @@ import re
 import utils
 import collections
 
-Machine = collections.namedtuple("Machine", ["name"])
+Machine = collections.namedtuple("Machine", ["name", "uuid"])
 OS_Type = collections.namedtuple("OS_Type", ["description", "id"])
 
 class VirtualBox():
@@ -41,11 +41,12 @@ class VirtualBox():
         lines = self.__run_command("list vms")
         existing_machines = []
         for line in lines:
-            m = re.match('"(\S+)" \S+', line)
+            m = re.match('"(\S+)" {(\S+)}', line)
             print(f"line={line}")
             if m:
-                machine_name = m.group(1)
-                existing_machines.append(Machine(machine_name))
+                name = m.group(1)
+                uuid = m.group(2)
+                existing_machines.append(Machine(name, uuid))
         return existing_machines
     
     def guest_os_types(self):
@@ -84,8 +85,8 @@ class VirtualBox():
 
         return False, None 
     
-    def set_machine(self, machine_uuid, memory, adapter_name):
-        arguments = f"modifyvm {machine_uuid} --memory {memory} --acpi on --nic1 bridged --nictype1 82540EM --bridgeadapter1 {adapter_name}"
+    def set_machine(self, uuid, memory, adapter_name):
+        arguments = f"modifyvm {uuid} --memory {memory} --acpi on --nic1 bridged --nictype1 82540EM --bridgeadapter1 {adapter_name}"
         lines = self.__run_command(arguments, True)
         
     def register_machine(self, name):

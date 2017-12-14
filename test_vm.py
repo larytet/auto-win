@@ -32,8 +32,8 @@ class TestInstallVm:
         vbox = virtualbox_shell.VirtualBox()
         for vm in vbox.machines():
             if vm_name == vm.name:
-                return True;
-        return False
+                return True, vm;
+        return False, None
             
         
     def __find_iso(self, isos, os, architecture):
@@ -63,8 +63,6 @@ class TestInstallVm:
                 print(f"Hit OS type {os_type}")
                 return os_type.id
         return None
-            
-            
                     
     def __install_machine(self, iso, os, architecture):
         
@@ -78,10 +76,6 @@ class TestInstallVm:
         assert res, f"Failed to create {machine_name}"
         print(f"Created machine {machine_name} uuid={machine_uuid} in {machine_settings_file}")
         vbox.register_machine(machine_uuid)
-        res, adapter_name, _ = utils.get_connected_network_adapter()
-        assert res, "I did not find any connected network adapters on the host machine"
-        memory = 2*1024
-        vbox.set_machine(machine_uuid, memory, adapter_name)
         
     def test_virtual_box(self):
         assert virtualbox_shell.VirtualBox().is_ready(), "No VBoxManage in the path?"
@@ -99,7 +93,8 @@ class TestInstallVm:
         print(target_platforms)
         index = 0
         for target_platform in target_platforms:
-            if not self.__vm_presents(target_platform.os, target_platform.architecture):
+            presents, _ = self.__vm_presents(target_platform.os, target_platform.architecture)
+            if not presents:
                 missing_platforms.append((index, target_platform))
             index += 1
 
@@ -108,5 +103,16 @@ class TestInstallVm:
             assert len(isos) > index, f"No ISO is specified for the missing {target_platform}"
             self.__install_machine(isos[index], target_platform.os, target_platform.architecture)
             
-            
+    def test_setup_machines(self, target_platforms):
+        res, adapter_name, _ = utils.get_connected_network_adapter()
+        assert res, "I did not find any connected network adapters on the host machine"
+        
+        vbox = virtualbox_shell.VirtualBox()
+        memory = 2*1024
+        for target_platform in target_platforms:
+            os, architecture = target_platform.os, target_platform.architecture
+            presents, machine = self.__vm_presents(os, architecture)
+            assert presents, f"Failed to find machine {os} {architecture}"           
+            vbox.set_machine(machine.uuid, memory, adapter_name)
+        
             
