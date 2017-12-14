@@ -84,6 +84,11 @@ class TestInstallVm:
     def test_virtual_box(self):
         assert virtualbox_shell.VirtualBox().is_ready(), "No VBoxManage in the path?"
 
+    def test_network(self):
+        res, adapter_name, ip_address = utils.get_connected_network_adapter()
+        assert res, "I did not find any connected network adapters on the host machine"
+        print(f"Adapter {adapter_name} has {ip_address}")
+        
     def test_installed_machines(self, target_platforms, isos):
         '''
         Collect list of missing VMs
