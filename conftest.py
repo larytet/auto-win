@@ -4,7 +4,6 @@
 import pytest
 import os
 from collections import namedtuple
-import re
 
 
 def pytest_addoption(parser):
