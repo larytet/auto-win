@@ -89,7 +89,7 @@ class TestInstallVm:
     def test_network(self):
         res, adapter_name, ip_address = utils.get_connected_network_adapter()
         assert res, "I did not find any connected network adapters on the host machine"
-        print(f"Adapter {adapter_name} has {ip_address}")
+        print(f"I am going to use network adapter {adapter_name}, {ip_address}")
         
     def test_installed_machines(self, target_platforms, isos):
         '''

@@ -44,14 +44,14 @@ def executable_exists(name):
 
 def get_connected_network_adapter():
     lines = []
-    run_shell_command("ifconfig", "ifconfig", lines)
+    run_shell_command("ifconfig", None, lines)
     adapter_name = None
     ip_address = None
     for line in lines:
         m = re.match('^(.+): flags=.+', line)
         if m and not adapter_name and not ip_address:
             adapter_name = m.group(1)
-        m = re.match('\s+inet (.+) .+', line)
+        m = re.match('inet\s+(\S+)\s+netmask.+', line)
         if m and adapter_name and not ip_address:
             ip_address = m.group(1)
             if ip_address != "127.0.0.1":
