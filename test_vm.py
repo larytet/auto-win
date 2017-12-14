@@ -74,9 +74,9 @@ class TestInstallVm:
         machine_name = self.__get_vm_name(os, architecture)
         os_type_id = self.__find_machine_type(os, architecture)
         vbox = virtualbox_shell.VirtualBox()
-        res, machine_uuid = vbox.create_machine(machine_path, machine_name, os_type_id)
+        res, machine_uuid, machine_settings_file = vbox.create_machine(machine_path, machine_name, os_type_id)
         assert res, f"Failed to create {machine_name}"
-        print(f"Created machine {machine_uuid}")
+        print(f"Created machine {machine_name} uuid={machine_uuid} in {machine_settings_file}")
         vbox.register_machine(machine_uuid)
         
     def test_virtual_box(self):

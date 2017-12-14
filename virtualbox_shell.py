@@ -70,10 +70,18 @@ class VirtualBox():
     def create_machine(self, path, name, type):
         arguments = f"createvm --name '{name}' --ostype {type} --register"
         lines = self.__run_command(arguments, True)
+        uuid = None
+        settings_file = None
         for line in lines:
             m = re.match('UUID:\s+(.+)', line)
             if m:
-                return True, m.group(1)
+                uuid = m.group(1)
+            m = re.match('Settings file:\s+(.+)', line)
+            if m:
+                settings_file = m.group(1)
+            if uuid and settings_file:
+                return True, uuid, settings_file
+
         return False, None 
         
     def register_machine(self, name):
