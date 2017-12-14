@@ -89,16 +89,28 @@ class VirtualBox():
         arguments = f"modifyvm {uuid} --memory {memory} --acpi on --nic1 bridged --nictype1 82540EM --bridgeadapter1 {adapter_name}"
         self.__run_command(arguments, True)
         
-    def add_hard_disk(self, uuid, cd_rom):
+    def add_hard_disk(self, settings_file, uuid, iso_path):
+        '''
+        See https://www.perkin.org.uk/posts/create-virtualbox-vm-from-the-command-line.html
+        https://www.praim.com/virtualbox-scripting-tutorial
+        '''
+        name = os.path.basename(settings_file)
+        folder = os.path.dirname(settings_file)
         # Create vmdk image
-        arguments = f"internalcommands createrawvmdk --filename thinox1.vmdk --rawdisk <abspath>/thinox.raw"
+        arguments = f"internalcommands createrawvmdk --filename {folder}/{name}.vmdk" # --rawdisk <abspath>/{name}.raw"
         self.__run_command(arguments, True)
+        
         # Add hard disk controller
-        #VBoxManage storagectl “Thinox1” –name “IDE Controller” –add ide –controller PIIX4
+        arguments = f"storagectl {uuid} --name 'IDE Controller' --add ide --controller PIIX4"
+        self.__run_command(arguments, True)
+        
         # Attach disk to the VM
-        #VBoxManage storageattach “Thinox1” –storagectl “IDE Controller” –port 0 –device 0 –type hdd –medium thinox1.vmdk
+        arguments = f"storageattach {uuid} --storagectl 'IDE Controller' --port 0 --device 0 --type hdd --medium {folder}/{name}.vmdk"
+        self.__run_command(arguments, True)
+        
         # attach boot disk
-        # VBoxManage.exe storageattach “Thinox1” –storagectl “IDE Controller” –port 0 –device 0 –type dvddrive –medium <iso path>
+        arguments = f"storageattach {uuid} --storagectl 'IDE Controller' --port 0 --device 0 --type dvddrive –medium {iso_path}"
+        self.__run_command(arguments, True)
                 
     def register_machine(self, name):
         pass
