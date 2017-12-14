@@ -27,10 +27,10 @@ class VirtualBox():
         home = os.path.expanduser("~")
         return os.path.join(home, "VirtualBox")
 
-    def __run_command(self, arguments):
+    def __run_command(self, arguments, copy_to_output=False):
         lines = []
         command = "VBoxManage "+arguments 
-        res = utils.run_shell_command(command, True, lines)
+        res = utils.run_shell_command(command, copy_to_output, lines)
         assert res, f"Failed to run {command}"
         return lines
             
@@ -38,8 +38,8 @@ class VirtualBox():
         lines = self.__run_command("list vms")
         existing_machines = []
         for line in lines:
-            line = line.stip()
             m = re.match('"(\S+)" \S+', line)
+            print(f"line={line}")
             if m:
                 machine_name = m.group(1)
                 existing_machines.append(Machine(machine_name))
@@ -52,11 +52,10 @@ class VirtualBox():
         os_id = None
         os_description = None
         for line in lines:
-            line = line.stip()
-            m = re.match('ID: (/S+)', line)
+            m = re.match('ID:\s+(.+)', line)
             if m and not os_id and not os_description:
                 os_id = m.group(1)
-            m = re.match('Description: (/S+)', line)
+            m = re.match('Description:\s+(.+)', line)
             if m and os_id and not os_description:
                 os_description = m.group(1)
                 os_types.append(OS_Type(os_description, os_id))
@@ -67,7 +66,7 @@ class VirtualBox():
     
     def create_machine(self, path, name, type):
         arguments = f"createvm –name '{name}' –ostype {type} –register"
-        lines = self.__run_command(arguments)
+        lines = self.__run_command(arguments, True)
         return name
         
     def register_machine(self, name):

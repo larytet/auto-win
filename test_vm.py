@@ -17,7 +17,7 @@ class TestInstallVm:
     '''
     
     def __get_vm_name(self, os, architecture):
-        return f"{os}.{architecture}"
+        return f"test.{os}.{architecture}"
 
     def __get_vm_group(self):
         return "test"
@@ -57,8 +57,10 @@ class TestInstallVm:
         machine_types = {"win8":"Windows 8", "win10":"Windows 10"}
         machine_type = machine_types[os]
         vbox = virtualbox_shell.VirtualBox()
-        for os_type in vbox.guest_os_types(): 
+        os_types = vbox.guest_os_types()
+        for os_type in os_types: 
             if machine_type in os_type.description and architecture in os_type.description:
+                print(f"Hit OS type {os_type}")
                 return os_type.id
         return None
             

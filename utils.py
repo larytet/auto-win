@@ -15,16 +15,17 @@ def run_shell_command(command, log_prompt=None, lines=None):
     p = subprocess.Popen(["bash", "-c", command], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     while True:
         nextline = p.stdout.readline()
-        if nextline == '' and p.poll() is not None:
-            break
         if nextline != ""  and log_prompt:
-            sys.stdout.write("{1}:{0}".format(nextline, log_prompt))
+            sys.stdout.write("{1}:{0}".format(nextline.decode('UTF-8'), log_prompt))
             sys.stdout.flush()
             
-        nextline = nextline.strip() 
+        nextline = nextline.decode('UTF-8').strip() 
         if lines != None and nextline != "":
             #print("Line '{0}' appended to the list".format(nextline))
             lines.append(nextline)
+
+        if p.poll() is not None:
+            break
     exitcode = p.wait()
     
     if exitcode != 0:
