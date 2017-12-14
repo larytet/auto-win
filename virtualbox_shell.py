@@ -70,7 +70,12 @@ class VirtualBox():
     def create_machine(self, path, name, type):
         arguments = f"createvm --name '{name}' --ostype {type} --register"
         lines = self.__run_command(arguments, True)
-        return name
+        created = False
+        for line in lines:
+            if "created" in line:
+                created = True
+                break
+        return created, name
         
     def register_machine(self, name):
         pass
