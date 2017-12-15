@@ -107,6 +107,11 @@ class TestInstallVm:
             uuid, settings_file = self.__install_machine(target_platform.os, target_platform.architecture)
             self.__setup_machines(target_platform, settings_file, uuid, adapter_name, isos[index])
 
+        vbox = virtualbox_shell.VirtualBox()
+        # patch for the laptops which switch between adapters often
+        for target_platform in target_platforms:
+            vbox.set_network_adapter(uuid, adapter_name)
+
     def __setup_machine(self, target_platform, settings_file, uuid, adapter_name, iso):            
         
         vbox = virtualbox_shell.VirtualBox()

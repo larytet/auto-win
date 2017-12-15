@@ -85,12 +85,16 @@ class VirtualBox():
 
         return False, None 
     
-    def set_machine(self, uuid, memory, adapter_name):
-        arguments = f"modifyvm {uuid} --memory {memory} --vram 128 --acpi on --nic1 bridged --nictype1 82540EM --bridgeadapter1 {adapter_name}"
+    def set_machine(self, uuid, memory):
+        arguments = f"modifyvm {uuid} --memory {memory} --vram 128 --acpi on"
         self.__run_command(arguments, True)
         arguments = f"modifyvm {uuid} --ioapic on"
         self.__run_command(arguments, True)
         arguments = f"modifyvm {uuid} --boot1 dvd --boot2 disk --boot3 none --boot4 none"
+        self.__run_command(arguments, True)
+        
+    def set_network_adapter(self, uuid, adapter_name):
+        arguments = f"modifyvm {uuid} --nic1 bridged --nictype1 82540EM --bridgeadapter1 {adapter_name}"
         self.__run_command(arguments, True)
         
     def add_hard_disk(self, settings_file, uuid, size, iso_path):
