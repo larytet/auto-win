@@ -134,8 +134,9 @@ class TestInstallVm:
             os_name, architecture = target_platform.os_name, target_platform.architecture
             iso = isos[index]
             assert len(isos) > index, f"No ISO is specified for the missing {target_platform}"
-            uuid, settings_file = self.__install_machine()
+            uuid, settings_file = self.__install_machine(os_name, architecture)
             self.__setup_machine(target_platform, settings_file, uuid, adapter_name, iso)
+            
             self.__patch_iso(iso, os_name, architecture)
 
         vbox = virtualbox_shell.VirtualBox()
