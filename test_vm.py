@@ -64,18 +64,16 @@ class TestInstallVm:
                 return os_type.id
         return None
                     
-    def __install_machine(self, iso, os, architecture):
-        
-        self.__patch_iso(iso, os, architecture)
-        
+    def __install_machine(self, os, architecture):
         machine_path = self.__get_vm_path(os, architecture)
         machine_name = self.__get_vm_name(os, architecture)
         os_type_id = self.__find_machine_type(os, architecture)
         vbox = virtualbox_shell.VirtualBox()
-        res, machine_uuid, machine_settings_file = vbox.create_machine(machine_path, machine_name, os_type_id)
+        res, uuid, settings_file = vbox.create_machine(machine_path, machine_name, os_type_id)
         assert res, f"Failed to create {machine_name}"
-        print(f"Created machine {machine_name} uuid={machine_uuid} in {machine_settings_file}")
-        vbox.register_machine(machine_uuid)
+        print(f"Created machine {machine_name} uuid={uuid} in {settings_file}")
+        vbox.register_machine(uuid)
+        return uuid, settings_file
         
     def test_virtual_box(self):
         assert virtualbox_shell.VirtualBox().is_ready(), "No VBoxManage in the path?"
@@ -106,10 +104,10 @@ class TestInstallVm:
             
         for index, target_platform in missing_platforms:
             assert len(isos) > index, f"No ISO is specified for the missing {target_platform}"
-            self.__install_machine(isos[index], target_platform.os, target_platform.architecture)
-            self.__setup_machines(target_platform, adapter_name)
+            uuid, settings_file = self.__install_machine(target_platform.os, target_platform.architecture)
+            self.__setup_machines(target_platform, settings_file, uuid, adapter_name, isos[index])
 
-    def __setup_machines(self, target_platform, adapter_name):            
+    def __setup_machine(self, target_platform, adapter_name):            
         
         vbox = virtualbox_shell.VirtualBox()
         memory = 2*1024
@@ -117,7 +115,5 @@ class TestInstallVm:
         presents, machine = self.__vm_presents(os, architecture)
         assert presents, f"Failed to find machine {os} {architecture}"           
         vbox.set_machine(machine.uuid, memory, adapter_name)
-
-    
-            
+        vbox.add_hard_disk(settings_file, uuid, 32*1024, iso_path)
             
