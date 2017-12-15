@@ -37,7 +37,7 @@ class TestInstallVm:
         return False, None
             
         
-    def __find_iso(self, isos, os, architecture):
+    def __find_iso(self, isos, os_name, architecture):
         '''
         Find an ISO which is a reasonable match for the spcified OS
         '''
@@ -72,7 +72,7 @@ class TestInstallVm:
         
     def test_environment(self):
         assert virtualbox_shell.VirtualBox().is_ready(), "No VBoxManage in the path? Try apt-get install virtualbox"
-        assert utils.executable_exists("fuseiso"), "No fuseiso? Try apt-get install fuseiso"
+        #assert utils.executable_exists("fuseiso"), "No fuseiso? Try apt-get install fuseiso"
         
 
     def test_remove_machines(self, target_platforms):
@@ -90,6 +90,8 @@ class TestInstallVm:
     def __patch_iso(self, iso, os_name, architecture):
         '''
         Add file AutoUnattend.xml to the ISO image if missing
+        To mount Windows image file I probably need 
+        mount -t udf -o loop /path/to/iso /mount/point
         '''
         folder = os.path.dirname(iso)
         mount_point = os.path.join(folder, "mount_iso")

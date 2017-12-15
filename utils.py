@@ -75,6 +75,7 @@ def get_connected_network_adapter():
 def mount_iso(iso, mount_point):
     if not os.path.exists(mount_point):
         os.makedirs(mount_point)
+    print(f"Mount {iso} in {mount_point}")
     res = run_shell_command(f"fuseiso {iso} {mount_point}")
     return res;
     
