@@ -100,9 +100,13 @@ class TestInstallVm:
         autounattend_files = {"win8":os.path.join(autounattend_folder, "Autounattend-win8-mbr.xml"),
                               "win10":os.path.join(autounattend_folder, "Autounattend-win10-mbr.xml"),}
         while True:
+            
             if os.path.isfile(autounattend_filename):
                 break
-            shutil.copy2(autounattend_files[os_name], autounattend_filename)
+            autounattend_file = autounattend_files[os_name]
+            print(f"Copy {autounattend_file} to {iso}")
+            shutil.copy2(autounattend_file, autounattend_filename)
+
             break
         utils.umount_iso(mount_point)
         
@@ -127,9 +131,12 @@ class TestInstallVm:
             print(f"Missing: {missing_platforms}")
             
         for index, target_platform in missing_platforms:
+            os_name, architecture = target_platform.os_name, target_platform.architecture
+            iso = isos[index]
             assert len(isos) > index, f"No ISO is specified for the missing {target_platform}"
-            uuid, settings_file = self.__install_machine(target_platform.os_name, target_platform.architecture)
-            self.__setup_machine(target_platform, settings_file, uuid, adapter_name, isos[index])
+            uuid, settings_file = self.__install_machine()
+            self.__setup_machine(target_platform, settings_file, uuid, adapter_name, iso)
+            self.__patch_iso(iso, os_name, architecture)
 
         vbox = virtualbox_shell.VirtualBox()
         # patch for the laptops which switch between adapters often
