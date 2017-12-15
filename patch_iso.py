@@ -62,18 +62,20 @@ if __name__ == '__main__':
                 print(f"Do nothing")
                 break
         break
-        iso_clone_tmp = tempfile.mkdtemp(None, "iso_clone", iso_folder)
+
         print(f"Clone {iso_filename}")
+        iso_clone_tmp = tempfile.mkdtemp(None, "iso_clone", iso_folder)
         res = utils.run_shell_command(f"cp -rf {mount_point}/* {iso_clone_tmp}", "", None)
         assert res, f"Failed to clone {iso_filename} using mount point {mount_point}"
-        iso_autounattend_filename = os.path.join(iso_clone_tmp, "Autounattend.xml")
-        res = utils.run_shell_command(f"cp -f {autounattend_filename} {iso_autounattend_filename}", "", None)
-        assert res, f"Failed to copy {autounattend_filename}"
-        
+
         utils.run_shell_command(f"umount {mount_point}", "", None)
         os.unlink(iso_mount_tmp)
         os.unlink(iso_filename)
         mount_point = None
+
+        iso_autounattend_filename = os.path.join(iso_clone_tmp, "Autounattend.xml")
+        res = utils.run_shell_command(f"cp -f {autounattend_filename} {iso_autounattend_filename}", "", None)
+        assert res, f"Failed to copy {autounattend_filename}"
         
         res = utils.run_shell_command(f"", "", None)
         assert res, f"Failed to copy {autounattend_filename}"
