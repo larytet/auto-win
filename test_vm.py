@@ -110,7 +110,9 @@ class TestInstallVm:
         vbox = virtualbox_shell.VirtualBox()
         # patch for the laptops which switch between adapters often
         for target_platform in target_platforms:
-            vbox.set_network_adapter(uuid, adapter_name)
+            os, architecture = target_platform.os, target_platform.architecture
+            presents, machine = self.__vm_presents(os, architecture)
+            vbox.set_network_adapter(machine.uuid, adapter_name)
 
     def __setup_machine(self, target_platform, settings_file, uuid, adapter_name, iso):            
         

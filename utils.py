@@ -6,6 +6,20 @@ import subprocess
 import sys
 import re
 
+def __run_shell_command_read_output(p, log_prompt=None, lines=None):
+    nextline = p.stdout.readline()
+    res = nextline != b""
+    #print(f"nextline={nextline}")
+    if nextline != ""  and log_prompt:
+        sys.stdout.write("{1}:{0}".format(nextline.decode('UTF-8'), log_prompt))
+        sys.stdout.flush()
+        
+    nextline = nextline.decode('UTF-8').strip() 
+    if lines != None and nextline != "":
+        #print("Line '{0}' appended to the list".format(nextline))
+        lines.append(nextline)
+    return res
+        
 def run_shell_command(command, log_prompt=None, lines=None):
     '''
     Execute the specified shell command, return result
@@ -17,19 +31,15 @@ def run_shell_command(command, log_prompt=None, lines=None):
     process_ended = False
     while True:
         process_ended = p.poll() is not None
-        nextline = p.stdout.readline()
-        if nextline != ""  and log_prompt:
-            sys.stdout.write("{1}:{0}".format(nextline.decode('UTF-8'), log_prompt))
-            sys.stdout.flush()
-            
-        nextline = nextline.decode('UTF-8').strip() 
-        if lines != None and nextline != "":
-            #print("Line '{0}' appended to the list".format(nextline))
-            lines.append(nextline)
+        while __run_shell_command_read_output(p, log_prompt, lines): pass;
+        __run_shell_command_read_output(p, log_prompt, lines)
 
         if process_ended:
             break
+        
+    while __run_shell_command_read_output(p, log_prompt, lines): pass;
     exitcode = p.wait()
+    while __run_shell_command_read_output(p, log_prompt, lines): pass;
     
     if exitcode != 0:
         print("Command '{0}' failed".format(command))
