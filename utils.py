@@ -10,7 +10,7 @@ def __run_shell_command_read_output(p, log_prompt=None, lines=None):
     nextline = p.stdout.readline()
     res = nextline != b""
     #print(f"nextline={nextline}")
-    if nextline != ""  and log_prompt:
+    if nextline != b""  and log_prompt:
         sys.stdout.write("{1}:{0}".format(nextline.decode('UTF-8'), log_prompt))
         sys.stdout.flush()
         
