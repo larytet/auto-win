@@ -64,7 +64,7 @@ if __name__ == '__main__':
 
         print(f"Clone {iso_filename}")
         iso_clone_tmp = tempfile.mkdtemp(None, "iso_clone", iso_folder)
-        res = utils.run_shell_command(f"cp -rf {mount_point}/* {iso_clone_tmp}", "", None)
+        res = utils.run_shell_command(f"cp -R {mount_point}/* {iso_clone_tmp}", "", None)
         assert res, f"Failed to clone {iso_filename} using mount point {mount_point}"
 
         utils.run_shell_command(f"umount {mount_point}", "", None)
@@ -76,6 +76,9 @@ if __name__ == '__main__':
         res = utils.run_shell_command(f"cp -f {autounattend_filename} {iso_autounattend_filename}", "", None)
         assert res, f"Failed to copy {autounattend_filename}"
         
+        # See https://unix.stackexchange.com/questions/283446/how-to-create-bootable-windows-8-iso-image-in-linux/313254
+        # https://github.com/Lekensteyn/windows-bootstrap
+        # 
         res = utils.run_shell_command(f"genisoimage -udf -o {iso_filename} {iso_clone_tmp}", "", None)
         assert res, f"Failed to generate {iso_filename}"
         os.unlink(iso_clone_tmp)
