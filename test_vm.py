@@ -121,5 +121,6 @@ class TestInstallVm:
         presents, machine = self.__vm_presents(os, architecture)
         assert presents, f"Failed to find machine {os} {architecture}"           
         vbox.set_machine(machine.uuid, memory)
-        vbox.add_hard_disk(settings_file, uuid, 32*1024, iso)
+        vbox.add_hard_disk(settings_file, uuid, 32*1024)
+        vbox.add_boot_disk(uuid, iso)
             

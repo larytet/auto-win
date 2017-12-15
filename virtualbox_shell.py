@@ -97,7 +97,7 @@ class VirtualBox():
         arguments = f"modifyvm {uuid} --nic1 bridged --nictype1 82540EM --bridgeadapter1 {adapter_name}"
         self.__run_command(arguments, True)
         
-    def add_hard_disk(self, settings_file, uuid, size, iso_path):
+    def add_hard_disk(self, settings_file, uuid, size):
         '''
         See https://www.perkin.org.uk/posts/create-virtualbox-vm-from-the-command-line.html
         https://www.praim.com/virtualbox-scripting-tutorial
@@ -119,12 +119,13 @@ class VirtualBox():
         arguments = f"storageattach {uuid} --storagectl 'SATA Controller' --port 0 --device 0 --type hdd --medium {vdi_filename}"
         self.__run_command(arguments, True)
         
-        # attach boot disk
+                
+    def add_boot_disk(self, uuid, iso_path):
         arguments = f"storagectl {uuid} --name 'IDE Controller' --add ide"
         self.__run_command(arguments, True)
         arguments = f"storageattach {uuid} --storagectl 'IDE Controller' --port 0 --device 0 --type dvddrive --medium {iso_path}"
         self.__run_command(arguments, True)
-                
+
     def register_machine(self, name):
         pass
 
