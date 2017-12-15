@@ -105,7 +105,7 @@ class TestInstallVm:
         for index, target_platform in missing_platforms:
             assert len(isos) > index, f"No ISO is specified for the missing {target_platform}"
             uuid, settings_file = self.__install_machine(target_platform.os, target_platform.architecture)
-            self.__setup_machines(target_platform, settings_file, uuid, adapter_name, isos[index])
+            self.__setup_machine(target_platform, settings_file, uuid, adapter_name, isos[index])
 
         vbox = virtualbox_shell.VirtualBox()
         # patch for the laptops which switch between adapters often
@@ -115,12 +115,11 @@ class TestInstallVm:
             vbox.set_network_adapter(machine.uuid, adapter_name)
 
     def __setup_machine(self, target_platform, settings_file, uuid, adapter_name, iso):            
-        
         vbox = virtualbox_shell.VirtualBox()
         memory = 2*1024
         os, architecture = target_platform.os, target_platform.architecture
         presents, machine = self.__vm_presents(os, architecture)
         assert presents, f"Failed to find machine {os} {architecture}"           
-        vbox.set_machine(machine.uuid, memory, adapter_name)
+        vbox.set_machine(machine.uuid, memory)
         vbox.add_hard_disk(settings_file, uuid, 32*1024, iso)
             

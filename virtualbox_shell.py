@@ -122,7 +122,8 @@ class VirtualBox():
         # attach boot disk
         arguments = f"storagectl {uuid} --name 'IDE Controller' --add ide"
         self.__run_command(arguments, True)
-        arguments = f"storageattach $VM --storagectl 'IDE Controller' --port 0 --device 0 --type dvddrive --medium {iso_path}"
+        arguments = f"storageattach {uuid} --storagectl 'IDE Controller' --port 0 --device 0 --type dvddrive --medium {iso_path}"
+        self.__run_command(arguments, True)
                 
     def register_machine(self, name):
         pass
