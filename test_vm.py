@@ -84,9 +84,6 @@ class TestInstallVm:
         # a short delay in case a human being watches the GUI - all VNs are disappearing here
         time.sleep(0.5)
                 
-    def __source_root_folder(self):
-        return os.path.dirname(os.path.realpath(__file__))
-    
     def __patch_iso(self, iso, os_name, architecture):
         '''
         Add file AutoUnattend.xml to the ISO image if missing
@@ -97,7 +94,7 @@ class TestInstallVm:
         mount_point = os.path.join(folder, "mount_iso")
         utils.mount_iso(iso, mount_point)
         autounattend_filename = os.path.join(mount_point, "Autounattend.xml")
-        root_folder = self.__source_root_folder()
+        root_folder = utils.source_root_folder()
         autounattend_folder = os.path.join(root_folder, "autounattend")
         autounattend_files = {"win8":os.path.join(autounattend_folder, "Autounattend-win8-mbr.xml"),
                               "win10":os.path.join(autounattend_folder, "Autounattend-win10-mbr.xml"),}
