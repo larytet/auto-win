@@ -83,6 +83,15 @@ class TestInstallVm:
         assert res, "I did not find any connected network adapters on the host machine"
         print(f"I am going to use network adapter {adapter_name}, {ip_address}")
         
+    def test_remove_machines(self, target_platforms):
+        vbox = virtualbox_shell.VirtualBox()
+        for target_platform in target_platforms:
+            presents, vm = self.__vm_presents(target_platform.os, target_platform.architecture)
+            if presents:
+                vbox.remove_machine(vm.name)
+        time.sleep(2.0)
+                
+        
     def test_install_machines(self, target_platforms, isos):
         '''
         Collect list of missing VMs

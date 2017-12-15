@@ -85,6 +85,10 @@ class VirtualBox():
 
         return False, None 
     
+    def remove_machine(self, name):
+        arguments = f"unregistervm {name} --delete"
+        self.__run_command(arguments, True)
+        
     def set_machine(self, uuid, memory):
         arguments = f"modifyvm {uuid} --memory {memory} --vram 128 --acpi on"
         self.__run_command(arguments, True)
