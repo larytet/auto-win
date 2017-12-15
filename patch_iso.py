@@ -77,7 +77,7 @@ if __name__ == '__main__':
         res = utils.run_shell_command(f"cp -f {autounattend_filename} {iso_autounattend_filename}", "", None)
         assert res, f"Failed to copy {autounattend_filename}"
         
-        res = utils.run_shell_command(f"", "", None)
+        res = utils.run_shell_command(f"genisoimage -udf -o {iso_filename}", "", None)
         assert res, f"Failed to copy {autounattend_filename}"
         
         
