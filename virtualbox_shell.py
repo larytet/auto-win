@@ -86,31 +86,39 @@ class VirtualBox():
         return False, None 
     
     def set_machine(self, uuid, memory, adapter_name):
-        arguments = f"modifyvm {uuid} --memory {memory} --acpi on --nic1 bridged --nictype1 82540EM --bridgeadapter1 {adapter_name}"
+        arguments = f"modifyvm {uuid} --memory {memory} --vram 128 --acpi on --nic1 bridged --nictype1 82540EM --bridgeadapter1 {adapter_name}"
+        self.__run_command(arguments, True)
+        arguments = f"modifyvm {uuid} --ioapic on"
+        self.__run_command(arguments, True)
+        arguments = f"modifyvm {uuid} --boot1 dvd --boot2 disk --boot3 none --boot4 none"
         self.__run_command(arguments, True)
         
-    def add_hard_disk(self, settings_file, uuid, iso_path):
+    def add_hard_disk(self, settings_file, uuid, size, iso_path):
         '''
         See https://www.perkin.org.uk/posts/create-virtualbox-vm-from-the-command-line.html
         https://www.praim.com/virtualbox-scripting-tutorial
+        @param size: maximum size of the hard disk in MB 
         '''
         name = os.path.basename(settings_file)
         folder = os.path.dirname(settings_file)
+        vdi_filename = os.path.join(folder, name+".vdi")
         # Create vmdk image
-        arguments = f"internalcommands createrawvmdk --filename {folder}/{name}.vmdk" # --rawdisk <abspath>/{name}.raw"
+        size = min(32768, size*1024)
+        arguments = f"createhd --filename {vdi_filename} --size {size}"
         self.__run_command(arguments, True)
         
         # Add hard disk controller
-        arguments = f"storagectl {uuid} --name 'IDE Controller' --add ide --controller PIIX4"
+        arguments = f"storagectl {uuid} --name 'SATA Controller' --add sata --controller IntelAHCI"
         self.__run_command(arguments, True)
         
         # Attach disk to the VM
-        arguments = f"storageattach {uuid} --storagectl 'IDE Controller' --port 0 --device 0 --type hdd --medium {folder}/{name}.vmdk"
+        arguments = f"storageattach {uuid} --storagectl 'SATA Controller' --port 0 --device 0 --type hdd --medium {vdi_filename}"
         self.__run_command(arguments, True)
         
         # attach boot disk
-        arguments = f"storageattach {uuid} --storagectl 'IDE Controller' --port 0 --device 0 --type dvddrive –medium {iso_path}"
+        arguments = f"storagectl {uuid} --name 'IDE Controller' --add ide"
         self.__run_command(arguments, True)
+        arguments = f"storageattach $VM --storagectl 'IDE Controller' --port 0 --device 0 --type dvddrive --medium {iso_path}"
                 
     def register_machine(self, name):
         pass
