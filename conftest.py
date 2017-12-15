@@ -26,7 +26,7 @@ def pytest_addoption(parser):
                      help="ISO file for installation of missing operating systems. ISOs should be specified in the same order as --os. This option can be used more than once")
 
     
-TargetPlatform = namedtuple('TargetPlatform', ['os', 'architecture'])
+TargetPlatform = namedtuple('TargetPlatform', ['os_name', 'architecture'])
 TargetPlatforms = []
     
 def pytest_configure(config):
@@ -42,13 +42,13 @@ def pytest_configure(config):
     for target_name in config.getoption("--os"):
         target_name = target_name.lower().strip()
         if ":" in target_name:
-            os, architecture = target_name.split(":")
+            os_name, architecture = target_name.split(":")
         else:
             architecture = "64"
-            os = target_name
+            os_name = target_name
         assert(architecture in ["32", "64"])
-        assert(os in ["win8", "win10"])
-        TargetPlatforms.append(TargetPlatform(os, architecture))
+        assert(os_name in ["win8", "win10"])
+        TargetPlatforms.append(TargetPlatform(os_name, architecture))
 
     if not len(TargetPlatforms):
         TargetPlatforms.append(TargetPlatform("win8", "64"))

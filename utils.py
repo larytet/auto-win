@@ -5,6 +5,7 @@
 import subprocess
 import sys
 import re
+import os
 
 def __run_shell_command_read_output(p, log_prompt=None, lines=None):
     nextline = p.stdout.readline()
@@ -70,3 +71,15 @@ def get_connected_network_adapter():
             ip_address = None
             
     return False, None, None 
+
+def mount_iso(iso, mount_point):
+    if not os.path.exists(mount_point):
+        os.makedirs(mount_point)
+    res = run_shell_command(f"fuseiso {iso} {mount_point}")
+    return res;
+    
+def umount_iso(mount_point):
+    res = run_shell_command(f"fuseiso -u {mount_point}")
+    return res;
+    
+    
