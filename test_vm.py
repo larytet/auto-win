@@ -107,7 +107,7 @@ class TestInstallVm:
             uuid, settings_file = self.__install_machine(target_platform.os, target_platform.architecture)
             self.__setup_machines(target_platform, settings_file, uuid, adapter_name, isos[index])
 
-    def __setup_machine(self, target_platform, adapter_name):            
+    def __setup_machine(self, target_platform, settings_file, uuid, adapter_name, iso):            
         
         vbox = virtualbox_shell.VirtualBox()
         memory = 2*1024
@@ -115,5 +115,5 @@ class TestInstallVm:
         presents, machine = self.__vm_presents(os, architecture)
         assert presents, f"Failed to find machine {os} {architecture}"           
         vbox.set_machine(machine.uuid, memory, adapter_name)
-        vbox.add_hard_disk(settings_file, uuid, 32*1024, iso_path)
+        vbox.add_hard_disk(settings_file, uuid, 32*1024, iso)
             
