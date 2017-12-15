@@ -61,7 +61,6 @@ if __name__ == '__main__':
                 print(f"Same hash {iso_autounattend_hash} for {iso_autounattend_filename} and {autounattend_filename}")
                 print(f"Do nothing")
                 break
-        break
 
         print(f"Clone {iso_filename}")
         iso_clone_tmp = tempfile.mkdtemp(None, "iso_clone", iso_folder)
@@ -77,11 +76,12 @@ if __name__ == '__main__':
         res = utils.run_shell_command(f"cp -f {autounattend_filename} {iso_autounattend_filename}", "", None)
         assert res, f"Failed to copy {autounattend_filename}"
         
-        res = utils.run_shell_command(f"genisoimage -udf -o {iso_filename}", "", None)
-        assert res, f"Failed to copy {autounattend_filename}"
-        
-        
+        res = utils.run_shell_command(f"genisoimage -udf -o {iso_filename} {iso_clone_tmp}", "", None)
+        assert res, f"Failed to generate {iso_filename}"
+        os.unlink(iso_clone_tmp)
 
+        break
+    
     if mount_point:
         utils.run_shell_command(f"umount {mount_point}", "", None)
         os.unlink(iso_mount_tmp)
