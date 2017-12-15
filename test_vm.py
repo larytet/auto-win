@@ -97,25 +97,27 @@ class TestInstallVm:
             if not presents:
                 missing_platforms.append((index, target_platform))
             index += 1
+        
+        res, adapter_name, _ = utils.get_connected_network_adapter()
+        assert res, "I did not find any connected network adapters on the host machine"
 
-        print(f"Missing: {missing_platforms}")
+        if len(missing_platforms):
+            print(f"Missing: {missing_platforms}")
+            
         for index, target_platform in missing_platforms:
             assert len(isos) > index, f"No ISO is specified for the missing {target_platform}"
             self.__install_machine(isos[index], target_platform.os, target_platform.architecture)
-            self.__setup_machines(target_platforms)
+            self.__setup_machines(target_platform, adapter_name)
 
-    def __setup_machines(self, target_platforms):            
-        res, adapter_name, _ = utils.get_connected_network_adapter()
-        assert res, "I did not find any connected network adapters on the host machine"
+    def __setup_machines(self, target_platform, adapter_name):            
         
         vbox = virtualbox_shell.VirtualBox()
         memory = 2*1024
-        for target_platform in target_platforms:
-            os, architecture = target_platform.os, target_platform.architecture
-            presents, machine = self.__vm_presents(os, architecture)
-            assert presents, f"Failed to find machine {os} {architecture}"           
-            vbox.set_machine(machine.uuid, memory, adapter_name)
+        os, architecture = target_platform.os, target_platform.architecture
+        presents, machine = self.__vm_presents(os, architecture)
+        assert presents, f"Failed to find machine {os} {architecture}"           
+        vbox.set_machine(machine.uuid, memory, adapter_name)
 
-            
+    
             
             
