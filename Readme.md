@@ -28,3 +28,6 @@ Windows version. The Windows setup will run automatically thanks to the floppy d
 	sudo ./create-floppy.py -i ./autounattend/Autounattend-win10-mbr.xml -t Autounattend.xml -o ./autounattend/Autounattend-win10-mbr.vfp
 	sudo ./create-floppy.py -i ./autounattend/Autounattend-win8-mbr.xml -t Autounattend.xml -o ./autounattend/Autounattend-win8-mbr.vfp
 	
+	# Download a Windows ISO from https://www.microsoft.com/en-us/evalcenter/
+	./run-test.sh --iso='./SW_DVD5_SA_Win_Ent_8_64BIT_English_Full_MLF_X18-16254.ISO' --os=win8:64 
+	
