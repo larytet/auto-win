@@ -9,14 +9,17 @@ Use sudo to run the script
 Usage:
   create-floppy.py -h | --help
   create-floppy.py -i <FILENAME> -o <FFILENAME>
+  create-floppy.py -i <FILENAME> -t <FILENAME> -o <FFILENAME>
 
 Example:
     create-floppy.py -i Autounattend.xml -o win8_autounattend.vfp 
+    create-floppy.py -i Autounattend-win8-mbr.xml -t Autounattend.xml -o win8_autounattend.vfp 
    
 Options:
-  -h --help                 Show this screen.
-  -i --infile=<FILENAME>    File/folder to copy to the image
-  -o --outfile=<FILENAME>   Name of the image
+  -h --help                  Show this screen.
+  -i --infile=<FILENAME>     File/folder to copy to the image
+  -t --target=<FILENAME>     Name of the file/folder in the image
+  -o --outfile=<FILENAME>    Name of the image
 """
 
 import os
@@ -55,10 +58,12 @@ if __name__ == '__main__':
     assert res, f"Failed to mount {image_filename} using mount point {mount_point}"
     
     image_content = arguments['--infile']
+    target_name = arguments.get('--target', os.path.basename(image_content))
     if os.path.isdir(image_content):
-        res = utils.run_shell_command(f"cp -R {image_content}/* {mount_point}/.", "", None)
+        res = utils.run_shell_command(f"mkdir -p {mount_point}/target_name", "", None)
+        res = utils.run_shell_command(f"cp -R {image_content}/* {mount_point}/{target_name}/.", "", None)
     else:
-        res = utils.run_shell_command(f"cp -R {image_content} {mount_point}/.", "", None)
+        res = utils.run_shell_command(f"cp -R {image_content} {mount_point}/{target_name}", "", None)
     assert res, f"Failed to copy {image_content} to {mount_point}"
 
         
