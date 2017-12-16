@@ -31,7 +31,6 @@ import shutil
 
 import utils
 
-    
 if __name__ == '__main__':
     arguments = docopt(__doc__, version='0.1')
     image_filename = arguments['--outfile']
@@ -43,24 +42,38 @@ if __name__ == '__main__':
     mount_point = os.path.join(image_folder, image_mount_tmp)
 
     size = 1440*1024
-    res = utils.run_shell_command(f"fallocate -l {size} {image_filename}", "", None)
-    assert res, f"Failed to allocate {size} bytes for {image_filename}"
-    
-    res = utils.run_shell_command(f"mkfs.vfat {image_filename}", "", None)
-    assert res, f"Failed to create file system in the {image_filename}"
-    
-    res = utils.run_shell_command(f"mount -o loop {image_filename} {mount_point}", "", None)
-    assert res, f"Failed to mount {image_filename} using mount point {mount_point}"
-    
-    image_content = arguments['--infile']
-    target_name = arguments.get('--target', os.path.basename(image_content))
-    if os.path.isdir(image_content):
-        res = utils.run_shell_command(f"mkdir -p {mount_point}/target_name", "", None)
-        res = utils.run_shell_command(f"cp -R {image_content}/* {mount_point}/{target_name}/.", "", None)
-    else:
-        res = utils.run_shell_command(f"cp -R {image_content} {mount_point}/{target_name}", "", None)
-    assert res, f"Failed to copy {image_content} to {mount_point}"
-
+    while True:
         
-    utils.run_shell_command(f"umount {mount_point}", "", None)
-    shutil.rmtree(image_mount_tmp)
+        res = utils.run_shell_command(f"fallocate -l {size} {image_filename}", "", None)
+        msg = f"Failed to allocate {size} bytes for {image_filename}"
+        if not res:
+            break; 
+        
+        res = utils.run_shell_command(f"mkfs.vfat {image_filename}", "", None)
+        msg = f"Failed to create file system in the {image_filename}"
+        if not res:
+            break; 
+        
+        res = utils.run_shell_command(f"mount -o loop {image_filename} {mount_point}", "", None)
+        msg = f"Failed to mount {image_filename} using mount point {mount_point}"
+        if not res:
+            break; 
+        
+        image_content = arguments['--infile']
+        target_name = arguments.get('--target', os.path.basename(image_content))
+        if os.path.isdir(image_content):
+            res = utils.run_shell_command(f"mkdir -p {mount_point}/target_name", "", None)
+            res = utils.run_shell_command(f"cp -R {image_content}/* {mount_point}/{target_name}/.", "", None)
+        else:
+            res = utils.run_shell_command(f"cp -R {image_content} {mount_point}/{target_name}", "", None)
+        msg = f"Failed to copy {image_content} to {mount_point}"
+        if not res:
+            break; 
+
+    break
+    if not res:
+        print(msg)
+    
+    if os.path.dirname(mount_point):
+        utils.run_shell_command(f"umount {mount_point}", "", None)
+        shutil.rmtree(image_mount_tmp)
