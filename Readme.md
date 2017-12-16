@@ -40,3 +40,4 @@ Windows version. The Windows setup will run automatically thanks to the floppy d
 * https://github.com/Lekensteyn/windows-bootstrap
 * https://virgo47.wordpress.com/2016/03/18/building-windows-virtualbox-machines/  Working Win10
 * https://superuser.com/questions/342433/how-to-create-an-empty-floppy-image-with-virtualbox-windows-guest
+* http://windowsafg.no-ip.org
