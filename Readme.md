@@ -42,3 +42,4 @@ Windows version. The Windows setup will run automatically thanks to the floppy d
 * https://superuser.com/questions/342433/how-to-create-an-empty-floppy-image-with-virtualbox-windows-guest
 * http://windowsafg.no-ip.org
 * https://github.com/joefitzgerald/packer-windows  Use of Packer to create updated Windows images
+* https://www.packer.io/intro/use-cases.html  Packer
