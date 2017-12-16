@@ -83,6 +83,6 @@ def umount_iso(mount_point):
     res = run_shell_command(f"fuseiso -u {mount_point}")
     return res;
     
-def source_root_folder(self):
+def source_root_folder():
     return os.path.dirname(os.path.realpath(__file__))
     

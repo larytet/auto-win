@@ -83,31 +83,14 @@ class TestInstallVm:
                 vbox.remove_machine(vm.name)
         # a short delay in case a human being watches the GUI - all VNs are disappearing here
         time.sleep(0.5)
-                
-    def __patch_iso(self, iso, os_name, architecture):
-        '''
-        Add file AutoUnattend.xml to the ISO image if missing
-        To mount Windows image file I probably need 
-        mount -t udf -o loop /path/to/iso /mount/point
-        '''
-        folder = os.path.dirname(iso)
-        mount_point = os.path.join(folder, "mount_iso")
-        utils.mount_iso(iso, mount_point)
-        autounattend_filename = os.path.join(mount_point, "Autounattend.xml")
-        root_folder = utils.source_root_folder()
-        autounattend_folder = os.path.join(root_folder, "autounattend")
-        autounattend_files = {"win8":os.path.join(autounattend_folder, "Autounattend-win8-mbr.xml"),
-                              "win10":os.path.join(autounattend_folder, "Autounattend-win10-mbr.xml"),}
-        while True:
             
-            if os.path.isfile(autounattend_filename):
-                break
-            autounattend_file = autounattend_files[os_name]
-            print(f"Copy {autounattend_file} to {iso}")
-            shutil.copy2(autounattend_file, autounattend_filename)
-
-            break
-        utils.umount_iso(mount_point)
+    def __get_autounattend_vfp(self, os_name):
+        source_root = utils.source_root_folder()
+        return os.path.join(source_root, f"Autounattend-{os_name}-mbr.vfp")
+    
+    def __get_autounattend_vfp_command(self, os_name):
+        source_root = utils.source_root_folder()
+        return f"sudo SRCROOT={source_root} $SRCROOT/create-floppy.py -i $SRCROOT/autounattend/Autounattend-{os_name}-mbr.xml -t Autounattend.xml -o $SRCROOT/autounattend/Autounattend-{os_name}-mbr.vfp"
         
     def test_install_machines(self, target_platforms, isos):
         '''
@@ -131,12 +114,19 @@ class TestInstallVm:
             
         for index, target_platform in missing_platforms:
             os_name, architecture = target_platform.os_name, target_platform.architecture
+            autounattend_vfp = self.__get_autounattend_vfp(os_name)
+            if not os.path.isfile(autounattend_vfp):
+                autounattend_command = self.__get_autounattend_vfp_command(os_name)
+                print("Floppy image {autounattend_vfp} is missing. Try {autounattend_command}")
+                assert False, "Floppy image {autounattend_vfp} is not found"
+                
             iso = isos[index]
             assert len(isos) > index, f"No ISO is specified for the missing {target_platform}"
             uuid, settings_file = self.__install_machine(os_name, architecture)
             self.__setup_machine(target_platform, settings_file, uuid, adapter_name, iso)
-            
-            self.__patch_iso(iso, os_name, architecture)
+            vbox = virtualbox_shell.VirtualBox()
+            vbox.add_boot_disk(uuid, iso)
+            vbox.add_floppy_disk(uuid, autounattend_vfp)
 
         vbox = virtualbox_shell.VirtualBox()
         # patch for the laptops which switch between adapters often
@@ -145,7 +135,7 @@ class TestInstallVm:
             presents, machine = self.__vm_presents(os_name, architecture)
             vbox.set_network_adapter(machine.uuid, adapter_name)
 
-    def __setup_machine(self, target_platform, settings_file, uuid, adapter_name, iso):            
+    def __setup_machine(self, target_platform, settings_file, uuid, adapter_name):            
         vbox = virtualbox_shell.VirtualBox()
         memory = 2*1024
         os_name, architecture = target_platform.os_name, target_platform.architecture
@@ -153,5 +143,4 @@ class TestInstallVm:
         assert presents, f"Failed to find machine {os_name} {architecture}"           
         vbox.set_machine(machine.uuid, memory)
         vbox.add_hard_disk(settings_file, uuid, 32*1024)
-        vbox.add_boot_disk(uuid, iso)
             
