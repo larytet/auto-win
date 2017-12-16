@@ -130,6 +130,12 @@ class VirtualBox():
         arguments = f"storageattach {uuid} --storagectl 'IDE Controller' --port 0 --device 0 --type dvddrive --medium {iso_path}"
         self.__run_command(arguments, True)
 
+    def add_floppy_disk(self, uuid, vfp_path):
+        arguments = f"storagectl {uuid} --name 'Floppy' --add floppy"
+        self.__run_command(arguments, True)
+        arguments = f"storageattach {uuid} --storagectl 'Floppy' --port 0 --device 0 --type fdd --medium {vfp_path}"
+        self.__run_command(arguments, True)
+
     def register_machine(self, name):
         pass
 
