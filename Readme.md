@@ -1,9 +1,16 @@
-*  Windows guest running in VirtualBox VM 
+
+# Goals
+
+*  Automatically install a Windows guest in VirtualBox VM 
 *  Linux Host
 *  PyDev
 
+# How it works
 
-Usage (Python 3.6 assumed):
+The first test which actually does something is test_install_machines(). The script will create and setup a virtual machine for specified 
+Windows version. The Windows setup will run automatically thanks to the floppy disk image which contains Autounattend.xml 
+
+# Usage (Python 3.6 assumed):
 
 	sudo apt-get install virtualbox mkisofs
 	sudo apt-get install python3-pip
