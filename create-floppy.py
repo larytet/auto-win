@@ -31,11 +31,6 @@ import shutil
 
 import utils
 
-# See 
-# https://unix.stackexchange.com/questions/283446/how-to-create-bootable-windows-8-iso-image-in-linux/313254
-# https://github.com/Lekensteyn/windows-bootstrap
-# Working Win10 https://virgo47.wordpress.com/2016/03/18/building-windows-virtualbox-machines/
-# https://superuser.com/questions/342433/how-to-create-an-empty-floppy-image-with-virtualbox-windows-guest
     
 if __name__ == '__main__':
     arguments = docopt(__doc__, version='0.1')

@@ -31,3 +31,12 @@ Windows version. The Windows setup will run automatically thanks to the floppy d
 	# Download a Windows ISO from https://www.microsoft.com/en-us/evalcenter/
 	./run-test.sh --iso='./SW_DVD5_SA_Win_Ent_8_64BIT_English_Full_MLF_X18-16254.ISO' --os=win8:64 
 	
+	
+	
+# Links
+
+ 
+* https://unix.stackexchange.com/questions/283446/how-to-create-bootable-windows-8-iso-image-in-linux/313254
+* https://github.com/Lekensteyn/windows-bootstrap
+* https://virgo47.wordpress.com/2016/03/18/building-windows-virtualbox-machines/  Working Win10
+* https://superuser.com/questions/342433/how-to-create-an-empty-floppy-image-with-virtualbox-windows-guest
