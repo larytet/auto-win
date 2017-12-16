@@ -38,11 +38,11 @@ if __name__ == '__main__':
     arguments = docopt(__doc__, version='0.1')
     image_filename = arguments['--outfile']
     image_filename = os.path.realpath(image_filename)
-    image_folder = os.path.dirname(iso_filename)
-    image_basename = os.path.basename(iso_filename)
+    image_folder = os.path.dirname(image_filename)
+    image_basename = os.path.basename(image_filename)
     
-    image_mount_tmp = tempfile.mkdtemp(None, "mount_iso", iso_folder) 
-    mount_point = os.path.join(iso_folder, image_mount_tmp)
+    image_mount_tmp = tempfile.mkdtemp(None, "mount-iso-", image_folder) 
+    mount_point = os.path.join(image_folder, image_mount_tmp)
 
     size = 1440*1024
     res = utils.run_shell_command(f"fallocate -l {size} {image_filename}", "", None)
@@ -63,4 +63,4 @@ if __name__ == '__main__':
 
         
     utils.run_shell_command(f"umount {mount_point}", "", None)
-    os.unlink(image_mount_tmp)
+    shutil.rmtree(image_mount_tmp)
