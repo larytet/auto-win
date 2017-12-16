@@ -1,21 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""patch_iso
+"""create-floppy
 
-Clone ISO, add relevant Autounattend.xml file
+Create vfp file with a floppy disk image for VirtualBox
 Use sudo to run the script  
  
 Usage:
-  patch_iso.py -h | --help
-  patch_iso.py -i <FILENAME>
+  create-floppy.py -h | --help
+  create-floppy.py -i <FILENAME> -o <FFILENAME>
 
 Example:
-    patch_iso.py -i SW_DVD5_WIN_ENT_10_1703_64BIT_English_MLF_X21-36478.ISO
+    create-floppy.py -i Autounattend.xml -o win8_autounattend.vfp 
    
 Options:
   -h --help                 Show this screen.
-  -i --iso=<FILENAME>       ISO image 
+  -i --infile=<FILENAME>    File/folder to copy to the image
+  -o --outfile=<FILENAME>   Name of the image
 """
 
 import os
@@ -76,9 +77,11 @@ if __name__ == '__main__':
         res = utils.run_shell_command(f"cp -f {autounattend_filename} {iso_autounattend_filename}", "", None)
         assert res, f"Failed to copy {autounattend_filename}"
         
-        # See https://unix.stackexchange.com/questions/283446/how-to-create-bootable-windows-8-iso-image-in-linux/313254
+        # See 
+        # https://unix.stackexchange.com/questions/283446/how-to-create-bootable-windows-8-iso-image-in-linux/313254
         # https://github.com/Lekensteyn/windows-bootstrap
-        # 
+        # Working Win10 https://virgo47.wordpress.com/2016/03/18/building-windows-virtualbox-machines/
+        # https://superuser.com/questions/342433/how-to-create-an-empty-floppy-image-with-virtualbox-windows-guest
         res = utils.run_shell_command(f"genisoimage -udf -o {iso_filename} {iso_clone_tmp}", "", None)
         assert res, f"Failed to generate {iso_filename}"
         os.unlink(iso_clone_tmp)
