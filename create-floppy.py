@@ -3,7 +3,7 @@
 
 """create-floppy
 
-Create vfp file with a floppy disk image for VirtualBox
+Create vfd file with a floppy disk image for VirtualBox
 Use sudo to run the script  
  
 Usage:
@@ -12,8 +12,8 @@ Usage:
   create-floppy.py -i <FILENAME> -t <FILENAME> -o <FFILENAME>
 
 Example:
-    create-floppy.py -i Autounattend.xml -o win8_autounattend.vfp 
-    create-floppy.py -i Autounattend-win8-mbr.xml -t Autounattend.xml -o win8_autounattend.vfp 
+    create-floppy.py -i Autounattend.xml -o win8_autounattend.vfd 
+    create-floppy.py -i Autounattend-win8-mbr.xml -t Autounattend.xml -o win8_autounattend.vfd 
    
 Options:
   -h --help                  Show this screen.

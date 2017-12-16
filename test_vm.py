@@ -84,13 +84,13 @@ class TestInstallVm:
         # a short delay in case a human being watches the GUI - all VNs are disappearing here
         time.sleep(0.5)
             
-    def __get_autounattend_vfp(self, os_name):
+    def __get_autounattend_vfd(self, os_name):
         source_root = utils.source_root_folder()
-        return os.path.join(source_root, f"Autounattend-{os_name}-mbr.vfp")
+        return os.path.join(source_root, "autounattend", f"Autounattend-{os_name}-mbr.vfd")
     
-    def __get_autounattend_vfp_command(self, os_name):
+    def __get_autounattend_vfd_command(self, os_name):
         source_root = utils.source_root_folder()
-        return f"sudo SRCROOT={source_root} $SRCROOT/create-floppy.py -i $SRCROOT/autounattend/Autounattend-{os_name}-mbr.xml -t Autounattend.xml -o $SRCROOT/autounattend/Autounattend-{os_name}-mbr.vfp"
+        return f"export SRCROOT={source_root};sudo -E $SRCROOT/create-floppy.py -i $SRCROOT/autounattend/Autounattend-{os_name}-mbr.xml -t Autounattend.xml -o $SRCROOT/autounattend/Autounattend-{os_name}-mbr.vfd"
         
     def test_install_machines(self, target_platforms, isos):
         '''
@@ -114,19 +114,18 @@ class TestInstallVm:
             
         for index, target_platform in missing_platforms:
             os_name, architecture = target_platform.os_name, target_platform.architecture
-            autounattend_vfp = self.__get_autounattend_vfp(os_name)
-            if not os.path.isfile(autounattend_vfp):
-                autounattend_command = self.__get_autounattend_vfp_command(os_name)
-                print("Floppy image {autounattend_vfp} is missing. Try {autounattend_command}")
-                assert False, "Floppy image {autounattend_vfp} is not found"
+            autounattend_vfd = self.__get_autounattend_vfd(os_name)
+            if not os.path.isfile(autounattend_vfd):
+                autounattend_command = self.__get_autounattend_vfd_command(os_name)
+                assert False, f"Floppy image {autounattend_vfd} is not found. Try {autounattend_command}"
                 
             iso = isos[index]
             assert len(isos) > index, f"No ISO is specified for the missing {target_platform}"
             uuid, settings_file = self.__install_machine(os_name, architecture)
-            self.__setup_machine(target_platform, settings_file, uuid, adapter_name, iso)
+            self.__setup_machine(target_platform, settings_file, uuid, adapter_name)
             vbox = virtualbox_shell.VirtualBox()
             vbox.add_boot_disk(uuid, iso)
-            vbox.add_floppy_disk(uuid, autounattend_vfp)
+            vbox.add_floppy_disk(uuid, autounattend_vfd)
 
         vbox = virtualbox_shell.VirtualBox()
         # patch for the laptops which switch between adapters often
