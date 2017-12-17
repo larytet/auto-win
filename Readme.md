@@ -16,6 +16,7 @@ Windows version. The Windows setup will run automatically thanks to the floppy d
 	sudo apt-get install python3-pip
 	
 	# install VirtualBox SDK from https://www.virtualbox.org/wiki/Downloads
+	# Note - I configure the VMs without the SDK, but with command shell instead 
 	# wget http://download.virtualbox.org/virtualbox/5.2.2/VirtualBoxSDK-5.2.2-119230.zip
 	# unzip VirtualBoxSDK-5.2.2-119230.zip
 	# cd sdk/installer/
