@@ -33,7 +33,7 @@ Windows version. The Windows setup will run automatically thanks to the floppy d
 	
 # Tips
 
-## Enable WinRM 
+## Enable WinRM in Win 8.1 
 	
 In the command line started as an administrator:
 
