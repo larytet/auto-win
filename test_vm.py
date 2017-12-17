@@ -90,7 +90,7 @@ class TestInstallVm:
     
     def __get_autounattend_vfd_command(self, os_name):
         source_root = utils.source_root_folder()
-        return f"export SRCROOT={source_root};sudo -E $SRCROOT/create-floppy.py -i $SRCROOT/autounattend/Autounattend-{os_name}-mbr.xml -t Autounattend.xml -o $SRCROOT/autounattend/Autounattend-{os_name}-mbr.vfd"
+        return f"export SRCROOT={source_root};sudo -E $SRCROOT/create-floppy.py -i $SRCROOT/autounattend/packer-floppy-{os_name} -t . -o $SRCROOT/autounattend/Autounattend-{os_name}-mbr.vfd"
         
     def test_install_machines(self, target_platforms, isos):
         '''
