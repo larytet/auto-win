@@ -62,7 +62,8 @@ if __name__ == '__main__':
         image_content = arguments['--infile']
         target_name = arguments.get('--target', os.path.basename(image_content))
         if os.path.isdir(image_content):
-            res = utils.run_shell_command(f"mkdir -p {mount_point}/target_name", "", None)
+            if target_name != ".":
+                res = utils.run_shell_command(f"mkdir -p {mount_point}/target_name", "", None)
             res = utils.run_shell_command(f"cp -R {image_content}/* {mount_point}/{target_name}/.", "", None)
         else:
             res = utils.run_shell_command(f"cp -R {image_content} {mount_point}/{target_name}", "", None)
