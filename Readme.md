@@ -64,3 +64,4 @@ In the command line started as an administrator:
 * https://github.com/joefitzgerald/packer-windows/issues/156
 * https://github.com/mjdorma/pyvbox/issues/99
 * https://github.com/joefitzgerald/packer-windows/issues/239
+* https://github.com/joefitzgerald/packer-windows/issues/248
