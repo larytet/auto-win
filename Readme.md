@@ -24,7 +24,6 @@ Windows version. The Windows setup will run automatically thanks to the floppy d
 	git clone git@github.com:larytet/auto-win.git
 	cd auto-win
 	sudo pip3 install -r requirements.txt
-
 	
 	export SRCROOT=$PWD;sudo -E $SRCROOT/create-floppy.py -i $SRCROOT/autounattend/packer-floppy-10 -t . -o $SRCROOT/autounattend/Autounattend-win10-mbr.vfd
 	export SRCROOT=$PWD;sudo -E $SRCROOT/create-floppy.py -i $SRCROOT/autounattend/packer-floppy-8 -t . -o $SRCROOT/autounattend/Autounattend-win8-mbr.vfd
