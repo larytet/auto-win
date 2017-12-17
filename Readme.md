@@ -57,6 +57,7 @@ In the command line started as an administrator:
 * http://windowsafg.no-ip.org
 * https://github.com/joefitzgerald/packer-windows  Windows templates for Packer
 * https://www.packer.io/intro/use-cases.html  Packer
+* http://www.mls-software.com OpenSSH for Windows
 * https://superuser.com/questions/531787/starting-windows-gui-program-in-windows-through-cygwin-sshd-from-ssh-client Open GUI applications via SSH 
 
 
