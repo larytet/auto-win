@@ -31,8 +31,21 @@ Windows version. The Windows setup will run automatically thanks to the floppy d
 	# Download a Windows ISO from https://www.microsoft.com/en-us/evalcenter/
 	./run-test.sh --iso='./SW_DVD5_SA_Win_Ent_8_64BIT_English_Full_MLF_X18-16254.ISO' --os=win8:64 
 	
+# Tips
+
+## Enable WinRM 
 	
+In the command line started as an administrator:
+
+	net start WinRM
+	powershell
+	enable-psremoting -force
+	exit
+	winrm get winrm/config 
+	winrm set winrm/config/service/auth @{Basic="true"}
+	winrm set winrm/config/service @{AllowUnencrypted="true"}
 	
+		
 # Links
 
 * http://www.hurryupandwait.io/blog/creating-windows-base-images-for-virtualbox-and-hyper-v-using-packer-boxstarter-and-vagrant
