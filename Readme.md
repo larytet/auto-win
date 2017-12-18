@@ -45,6 +45,9 @@ In the command line started as an administrator:
 	winrm set winrm/config/service/auth @{Basic="true"}
 	winrm set winrm/config/service @{AllowUnencrypted="true"}
 	
+	
+	Setupcomplete.cmd
+	
 Install VirtualBox SDK
 
 	install VirtualBox SDK from https://www.virtualbox.org/wiki/Downloads
