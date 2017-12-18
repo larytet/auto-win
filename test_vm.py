@@ -92,6 +92,8 @@ class TestInstallVm:
                 print(f"Stop {vm.name}")
                 if not dryrun:
                     #vbox.stop_machine(vm.uuid)
+                    # I want to shutdown the VM, because I am going to setup the network adapter
+                    # and need the VM in a mutable state  
                     vbox.power_down_machine(vm.uuid)
         # a short delay in case a human being watches the GUI - all VNs are disappearing here
         time.sleep(0.5)
