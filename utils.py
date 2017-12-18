@@ -38,7 +38,9 @@ def run_shell_command(command, log_prompt=None, lines=None):
     @param lines - if the list is not None collect the output
     @param log_prompt - if not None send the output to stdout 
     '''
-    print("Running "+bcolors.OKBLUE+f"{command}"+bcolors.ENDC)
+    print(f"{command}")
+    if log_prompt == None:
+        log_prompt = "\t"
     p = subprocess.Popen(["bash", "-c", command], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     process_ended = False
     while True:
@@ -53,7 +55,7 @@ def run_shell_command(command, log_prompt=None, lines=None):
     while __run_shell_command_read_output(p, log_prompt, lines): pass;
     
     if exitcode != 0:
-        print(bcolors.FAIL+f"Command {command} failed"+bcolors.ENDC)
+        print(f"Command {command} failed")
     print("Done {0} ...".format(command[:20]))
 
     
