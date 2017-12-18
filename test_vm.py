@@ -176,7 +176,7 @@ class TestInstallVm:
         for target_platform in target_platforms:
             os_name, architecture = target_platform.os_name, target_platform.architecture
             presents, machine = self.__vm_presents(os_name, architecture)
-            print(f"Setup network addater {adapter_name} to {uuid}")
+            print(f"Setup network addater {adapter_name} to {machine.uuid}")
             if not dryrun:
                 vbox.set_network_adapter(machine.uuid, adapter_name)
 
