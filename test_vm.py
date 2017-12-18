@@ -112,6 +112,16 @@ class TestInstallVm:
     def __get_autounattend_vfd_command(self, os_name):
         source_root = utils.source_root_folder()
         return f"export SRCROOT={source_root};sudo -E $SRCROOT/create-floppy.py -i $SRCROOT/autounattend/packer-floppy-{os_name} -t . -o $SRCROOT/autounattend/Autounattend-{os_name}-mbr.vfd"
+
+    def __setup_machine(self, target_platform, settings_file, uuid, adapter_name):            
+        vbox = virtualbox_shell.VirtualBox()
+        memory = 2*1024
+        os_name, architecture = target_platform.os_name, target_platform.architecture
+        presents, machine = self.__vm_presents(os_name, architecture)
+        assert presents, f"Failed to find machine {os_name} {architecture}"           
+        vbox.set_machine(machine.uuid, memory)
+        vbox.add_hard_disk(settings_file, uuid, 32*1024)
+            
         
     def test_install_machines(self, target_platforms, isos):
         '''
@@ -155,12 +165,11 @@ class TestInstallVm:
             presents, machine = self.__vm_presents(os_name, architecture)
             vbox.set_network_adapter(machine.uuid, adapter_name)
 
-    def __setup_machine(self, target_platform, settings_file, uuid, adapter_name):            
+    def test_start_machines(self, target_platforms):
         vbox = virtualbox_shell.VirtualBox()
-        memory = 2*1024
-        os_name, architecture = target_platform.os_name, target_platform.architecture
-        presents, machine = self.__vm_presents(os_name, architecture)
-        assert presents, f"Failed to find machine {os_name} {architecture}"           
-        vbox.set_machine(machine.uuid, memory)
-        vbox.add_hard_disk(settings_file, uuid, 32*1024)
-            
+        for target_platform in target_platforms:
+            os_name, architecture = target_platform.os_name, target_platform.architecture
+            presents, machine = self.__vm_presents(os_name, architecture)
+            assert presents, "At this point the VM shall exist"
+            vbox.start_machine(machine.uuid)
+
