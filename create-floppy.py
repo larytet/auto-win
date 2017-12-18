@@ -80,3 +80,8 @@ if __name__ == '__main__':
     if os.path.dirname(mount_point):
         utils.run_shell_command(f"umount {mount_point}", "", None)
         shutil.rmtree(image_mount_tmp)
+        
+    if res:
+        exit(0)
+    else:
+        exit(-1)
