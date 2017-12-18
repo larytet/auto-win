@@ -30,6 +30,12 @@ def pytest_addoption(parser):
                      default=False,
                      help="Start from scratch: remove all VMs")
     
+    parser.addoption("--headless_vms", 
+                     action="store_true", 
+                     default=False,
+                     help="Start VMs headless")
+    
+    
 TargetPlatform = namedtuple('TargetPlatform', ['os_name', 'architecture'])
 TargetPlatforms = []
     
@@ -72,3 +78,8 @@ def isos(request):
 def remove_vms(request):
     cleanall = request.config.getoption("--cleanall")
     return not cleanall
+
+@pytest.fixture
+def headless_vms(request):
+    headless = request.config.getoption("--headless_vms")
+    return not headless

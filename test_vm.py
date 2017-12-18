@@ -89,7 +89,8 @@ class TestInstallVm:
         for target_platform in target_platforms:
             running, vm = self.__vm_running(target_platform.os_name, target_platform.architecture)
             if running:
-                vbox.stop_machine(vm.name)
+                print(f"Stop {vm.name}")
+                vbox.stop_machine(vm.uuid)
         # a short delay in case a human being watches the GUI - all VNs are disappearing here
         time.sleep(0.5)
 
@@ -101,7 +102,8 @@ class TestInstallVm:
         for target_platform in target_platforms:
             presents, vm = self.__vm_presents(target_platform.os_name, target_platform.architecture)
             if presents:
-                vbox.remove_machine(vm.name)
+                print(f"Remove {vm.name}")
+                vbox.remove_machine(vm.uuid)
         # a short delay in case a human being watches the GUI - all VNs are disappearing here
         time.sleep(0.5)
             
@@ -165,11 +167,11 @@ class TestInstallVm:
             presents, machine = self.__vm_presents(os_name, architecture)
             vbox.set_network_adapter(machine.uuid, adapter_name)
 
-    def test_start_machines(self, target_platforms):
+    def test_start_machines(self, target_platforms, headless_vms):
         vbox = virtualbox_shell.VirtualBox()
         for target_platform in target_platforms:
             os_name, architecture = target_platform.os_name, target_platform.architecture
             presents, machine = self.__vm_presents(os_name, architecture)
             assert presents, "At this point the VM shall exist"
-            vbox.start_machine(machine.uuid)
+            vbox.start_machine(machine.uuid, headless_vms)
 

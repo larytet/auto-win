@@ -162,8 +162,11 @@ class VirtualBox():
         arguments = f"controlvm {uuid} savestate"
         self.__run_command(arguments, True)
 
-    def start_machine(self, uuid):
-        arguments = f"startvm {uuid} --type headless"
+    def start_machine(self, uuid, headless):
+        if headless:
+            arguments = f"startvm {uuid} --type headless"
+        else:
+            arguments = f"startvm {uuid}"
         self.__run_command(arguments, True)
 
     def register_machine(self, name):
