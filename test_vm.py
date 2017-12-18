@@ -36,6 +36,13 @@ class TestInstallVm:
                 return True, vm;
         return False, None
             
+    def __vm_running(self, os_name, architecture):
+        vm_name = self.__get_vm_name(os_name, architecture)
+        vbox = virtualbox_shell.VirtualBox()
+        for vm in vbox.running_machines():
+            if vm_name == vm.name:
+                return True, vm;
+        return False, None
         
     def __find_iso(self, isos, os_name, architecture):
         '''
@@ -74,8 +81,16 @@ class TestInstallVm:
         assert virtualbox_shell.VirtualBox().is_ready(), "No VBoxManage in the path? Try apt-get install virtualbox"
         #assert utils.executable_exists("fuseiso"), "No fuseiso? Try apt-get install fuseiso"
         
+    def test_stop_machines(self, target_platforms):
+        vbox = virtualbox_shell.VirtualBox()
+        for target_platform in target_platforms:
+            running, vm = self.__vm_running(target_platform.os_name, target_platform.architecture)
+            if running:
+                vbox.stop_machine(vm.name)
+        # a short delay in case a human being watches the GUI - all VNs are disappearing here
+        time.sleep(0.5)
 
-    def test_remove_machines(self, target_platforms):
+    def t1est_remove_machines(self, target_platforms):
         vbox = virtualbox_shell.VirtualBox()
         for target_platform in target_platforms:
             presents, vm = self.__vm_presents(target_platform.os_name, target_platform.architecture)

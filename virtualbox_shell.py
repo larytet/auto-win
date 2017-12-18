@@ -49,6 +49,18 @@ class VirtualBox():
                 existing_machines.append(Machine(name, uuid))
         return existing_machines
     
+    def running_machines(self):
+        lines = self.__run_command("list runningvms")
+        existing_machines = []
+        for line in lines:
+            m = re.match('"(\S+)" {(\S+)}', line)
+            print(f"line={line}")
+            if m:
+                name = m.group(1)
+                uuid = m.group(2)
+                existing_machines.append(Machine(name, uuid))
+        return existing_machines
+    
     def guest_os_types(self):
         lines = self.__run_command("list ostypes")
         os_types = []
@@ -135,6 +147,16 @@ class VirtualBox():
         self.__run_command(arguments, True)
         arguments = f"storageattach {uuid} --storagectl 'Floppy' --port 0 --device 0 --type fdd --medium {vfp_path}"
         self.__run_command(arguments, True)
+
+    def get_ip_address(self, uuid):
+        arguments = f"VBoxManage guestproperty get {uuid} /VirtualBox/GuestInfo/Net/0/V4/IP"
+        lines = self.__run_command(arguments, True)
+        for line in lines:
+            m = re.match('Value:\s+(.+)', line)
+            if m:
+                return m.group(1)
+        else:
+            return None
 
     def register_machine(self, name):
         pass
