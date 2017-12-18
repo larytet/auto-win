@@ -5,6 +5,17 @@ param (
 Write-Output "AutoStart: $AutoStart"
 $is_64bit = [IntPtr]::size -eq 8
 
+# get cygwin
+if ($is_64bit) {
+    $cygwin_download_url = "https://www.cygwin.com/setup-x86_64.exe"
+}
+else {
+    $cygwin_download_url = "https://www.cygwin.com/setup-x86.exe"
+}
+
+Write-Output "Downloading $cygwin_download_url"
+(New-Object System.Net.WebClient).DownloadFile($cygwin_download_url, "C:\Windows\Temp\setup-x86.exe")
+
 # setup openssh
 $ssh_download_url = "http://www.mls-software.com/files/setupssh-7.1p1-1.exe"
 
@@ -16,6 +27,7 @@ if (!(Test-Path "C:\Program Files\OpenSSH\bin\ssh.exe")) {
     # condition in which packer connects to SSH before we can disable the service
     Start-Process "C:\Windows\Temp\openssh.exe" "/S /port=2222 /privsep=1 /password=D@rj33l1ng" -NoNewWindow -Wait
 }
+
 
 Stop-Service "OpenSSHd" -Force
 
