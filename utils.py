@@ -22,7 +22,7 @@ def __run_shell_command_read_output(p, log_prompt=None, lines=None):
     nextline = p.stdout.readline()
     res = nextline != b""
     #print(f"nextline={nextline}")
-    if nextline != b""  and log_prompt:
+    if nextline != b""  and log_prompt != None:
         sys.stdout.write("{1}{0}".format(nextline.decode('UTF-8'), log_prompt))
         sys.stdout.flush()
         
@@ -44,7 +44,6 @@ def run_shell_command(command, log_prompt=None, lines=None):
     while True:
         process_ended = p.poll() is not None
         while __run_shell_command_read_output(p, log_prompt, lines): pass;
-        __run_shell_command_read_output(p, log_prompt, lines)
 
         if process_ended:
             break
@@ -55,7 +54,7 @@ def run_shell_command(command, log_prompt=None, lines=None):
     
     if exitcode != 0:
         print(bcolors.FAIL+f"Command {command} failed"+bcolors.ENDC)
-    print("Done {0} ...".format(command[:10]))
+    print("Done {0} ...".format(command[:20]))
 
     
     return exitcode == 0
@@ -87,11 +86,11 @@ def mount_iso(iso, mount_point):
     if not os.path.exists(mount_point):
         os.makedirs(mount_point)
     print(f"Mount {iso} in {mount_point}")
-    res = run_shell_command(f"fuseiso {iso} {mount_point}")
+    res = run_shell_command(f"fuseiso {iso} {mount_point}", "")
     return res;
     
 def umount_iso(mount_point):
-    res = run_shell_command(f"fuseiso -u {mount_point}")
+    res = run_shell_command(f"fuseiso -u {mount_point}", "")
     return res;
     
 def source_root_folder():
