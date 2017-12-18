@@ -32,7 +32,7 @@ class VirtualBox():
         command = "VBoxManage "+arguments
         log_prompt = None
         if copy_to_output:
-            log_prompt = "VBoxManage"
+            log_prompt = ""
         res = utils.run_shell_command(command, log_prompt, lines)
         assert res, f"Failed to run {command}"
         return lines

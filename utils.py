@@ -7,12 +7,23 @@ import sys
 import re
 import os
 
+
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
 def __run_shell_command_read_output(p, log_prompt=None, lines=None):
     nextline = p.stdout.readline()
     res = nextline != b""
     #print(f"nextline={nextline}")
     if nextline != b""  and log_prompt:
-        sys.stdout.write("{1}:{0}".format(nextline.decode('UTF-8'), log_prompt))
+        sys.stdout.write("{1}{0}".format(nextline.decode('UTF-8'), log_prompt))
         sys.stdout.flush()
         
     nextline = nextline.decode('UTF-8').strip() 
@@ -27,7 +38,7 @@ def run_shell_command(command, log_prompt=None, lines=None):
     @param lines - if the list is not None collect the output
     @param log_prompt - if not None send the output to stdout 
     '''
-    print("Execute '{0}'".format(command))
+    print(bcolors.OKBLUE+f"{command}"+bcolors.ENDC)
     p = subprocess.Popen(["bash", "-c", command], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     process_ended = False
     while True:
@@ -43,8 +54,8 @@ def run_shell_command(command, log_prompt=None, lines=None):
     while __run_shell_command_read_output(p, log_prompt, lines): pass;
     
     if exitcode != 0:
-        print("Command '{0}' failed".format(command))
-    print("Done {0}".format(command))
+        print(bcolors.FAIL+f"Command {command} failed"+bcolors.ENDC)
+    print("Done {0} ...".format(command[:10]))
 
     
     return exitcode == 0
