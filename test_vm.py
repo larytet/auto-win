@@ -93,7 +93,7 @@ class TestInstallVm:
                 if not dryrun:
                     #vbox.stop_machine(vm.uuid)
                     # I want to shutdown the VM, because I am going to setup the network adapter
-                    # and need the VM in a mutable state  
+                    # and need the VM in a mutable state. 
                     vbox.power_down_machine(vm.uuid)
         # a short delay in case a human being watches the GUI - all VNs are disappearing here
         time.sleep(0.5)
@@ -175,7 +175,10 @@ class TestInstallVm:
                 vbox.add_floppy_disk(uuid, autounattend_vfd)
 
         vbox = virtualbox_shell.VirtualBox()
-        # patch for the laptops which switch between adapters often
+        
+        # I configure the VM bridge to use a connected (has an assigned IP) Host
+        # network interface 
+        # The patch is for laptops which switch between WiFi/Wired interfacces often
         for target_platform in target_platforms:
             os_name, architecture = target_platform.os_name, target_platform.architecture
             presents, machine = self.__vm_presents(os_name, architecture)
