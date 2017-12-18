@@ -67,7 +67,8 @@ Install VirtualBox SDK
 * https://github.com/joefitzgerald/packer-windows  Windows templates for Packer
 * https://www.packer.io/intro/use-cases.html  Packer
 * http://www.mls-software.com OpenSSH for Windows
-* https://superuser.com/questions/531787/starting-windows-gui-program-in-windows-through-cygwin-sshd-from-ssh-client Open GUI applications via SSH 
+* https://superuser.com/questions/531787/starting-windows-gui-program-in-windows-through-cygwin-sshd-from-ssh-client Open GUI applications via SSH
+* https://stackoverflow.com/questions/745275/can-i-script-a-cygwin-install-to-include-certain-packages/7366200#7366200 
 
 
 # Relevant Issues
