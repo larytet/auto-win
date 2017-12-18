@@ -149,6 +149,9 @@ class VirtualBox():
         self.__run_command(arguments, True)
 
     def get_ip_address(self, uuid):
+        '''
+        Hot tip: try 'VBoxManage guestproperty enumerate <machine.uuid>'
+        '''
         arguments = f"guestproperty get {uuid} /VirtualBox/GuestInfo/Net/0/V4/IP"
         lines = self.__run_command(arguments, True)
         for line in lines:
