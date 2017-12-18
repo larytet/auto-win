@@ -262,7 +262,7 @@
                     <Description>Send ping to the host. I need the IP address in the host ARP table</Description>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <CommandLine>copy /Y "a:\pinghost.bat" "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\pinghost.bat"</CommandLine>
+                    <CommandLine>cmd.exe /c copy /Y "a:\pinghost.bat" "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\pinghost.bat"</CommandLine>
                     <Order>26</Order>
                     <Description>Send ping to the host after boot. I need the IP address in the host ARP table</Description>
                 </SynchronousCommand>

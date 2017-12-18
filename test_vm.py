@@ -11,6 +11,7 @@ import utils
 import datetime
 import virtualbox_shell
 import shutil
+from PIL.JpegPresets import presets
 
 class TestInstallVm:
     '''
@@ -112,6 +113,25 @@ class TestInstallVm:
         # a short delay in case a human being watches the GUI - all VNs are disappearing here
         time.sleep(0.5)
             
+    def test_clean_arp(self, target_platforms):
+        '''
+        Remove IP address of the machines. I am going to ping the created machines
+        using cached by arp IP address 
+        '''
+        vbox = virtualbox_shell.VirtualBox()
+        time_end = datetime.datetime.now() + datetime.timedelta(minutes=8)
+        uuids_macs = {} 
+        for target_platform in target_platforms:
+            os_name, architecture = target_platform.os_name, target_platform.architecture
+            presents, machine = self.__vm_presents(os_name, architecture)
+            if not presets:
+                continue
+            mac = vbox.get_mac_address(machine.uuid)
+            res, hostname, ipaddress = utils.find_ip_by_mac(mac)
+            if not res:
+                continue
+            utils.run_shell_command(f"ping -c 3 {ipaddress}")
+            
     def __get_autounattend_vfd(self, os_name):
         source_root = utils.source_root_folder()
         return os.path.join(source_root, "autounattend", f"Autounattend-{os_name}-mbr.vfd")
@@ -133,7 +153,6 @@ class TestInstallVm:
         if not dryrun:
             vbox.add_hard_disk(settings_file, uuid, 32*1024)
             
-        
     def test_install_machines(self, target_platforms, isos, dryrun):
         '''
         Collect list of missing VMs
@@ -185,7 +204,7 @@ class TestInstallVm:
             print(f"Setup network addater {adapter_name} to {machine.uuid}")
             if not dryrun:
                 vbox.set_network_adapter(machine.uuid, adapter_name)
-
+                
     def test_start_machines(self, target_platforms, headless_vms, dryrun):
         '''
         Start required VMs
@@ -205,7 +224,7 @@ class TestInstallVm:
         Wait for the setup to complete
         '''
         vbox = virtualbox_shell.VirtualBox()
-        time_end = datetime.datetime.now() + datetime.timedelta(minutes=5)
+        time_end = datetime.datetime.now() + datetime.timedelta(minutes=8)
         uuids_macs = {} 
         for target_platform in target_platforms:
             os_name, architecture = target_platform.os_name, target_platform.architecture
@@ -220,8 +239,9 @@ class TestInstallVm:
             mac, machine_name = uuids_macs[uuid]
             res, hostname, ipaddress = utils.find_ip_by_mac(mac)
             if res:
-                print(f"Got IP {ipaddress} {hostname} for {mac} {machine_name} {uuid}")
-                del uuids_macs[uuid]
+                res = utils.run_shell_command(f"ping -c 1 {ipaddress}")
+                if res:
+                    print(f"Got a response from {ipaddress} {hostname} for {mac} {machine_name} {uuid}")
+                    del uuids_macs[uuid]
             time.sleep(5.0)
-
-        assert len(uuids_macs) == 0, "Failed to get IP address for "+uuids_macs
+        assert len(uuids_macs) == 0, "Failed to get a response to ping for "+str(uuids_macs)
