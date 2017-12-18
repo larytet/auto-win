@@ -10,6 +10,11 @@
 The first test which actually does something is test_install_machines(). The script will create and setup a virtual machine for specified 
 Windows version. The Windows setup will run automatically thanks to the floppy disk image which contains Autounattend.xml 
 
+Images for the Autounatted floppy disk are based on the images from https://github.com/joefitzgerald/packer-windows
+
+The Windows interactive setups reads the answers from the file Autounattend.xml. The Autounattend.xml contains patches for the 
+Windows registry, invokes additional setup scritps.
+
 # Usage (Python 3.6 assumed):
 
 	sudo apt-get install virtualbox mkisofs
