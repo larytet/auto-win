@@ -124,7 +124,7 @@ class TestInstallVm:
         for target_platform in target_platforms:
             os_name, architecture = target_platform.os_name, target_platform.architecture
             presents, machine = self.__vm_presents(os_name, architecture)
-            if not presets:
+            if not presents:
                 continue
             mac = vbox.get_mac_address(machine.uuid)
             res, hostname, ipaddress = utils.find_ip_by_mac(mac)
