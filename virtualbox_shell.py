@@ -157,9 +157,11 @@ class VirtualBox():
         arguments = f"VBoxManage showvminfo {uuid}  --machinereadable"
         lines = self.__run_command(arguments, True)
         for line in lines:
-            m = re.match('macaddress1=(.+)', line)
+            m = re.match('macaddress1=\"(.+)\"', line)
             if m:
-                return m.group(1)
+                s = m.group(1)
+                macaddress_formatted = ':'.join(a+b for a,b in zip(s[::2], s[1::2]))
+                return macaddress_formatted
         else:
             return None
         

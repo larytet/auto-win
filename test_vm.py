@@ -8,7 +8,7 @@ import os
 import sys
 import threading
 import utils
-
+import datetime
 import virtualbox_shell
 import shutil
 
@@ -195,3 +195,28 @@ class TestInstallVm:
             print(f"Start machine {machine.uuid}, headless is {headless_vms}")
             if not dryrun:
                 vbox.start_machine(machine.uuid, headless_vms)
+                
+    def test_wait_for_ip(self, target_platforms):
+        vbox = virtualbox_shell.VirtualBox()
+        time_end = datetime.datetime.now().time() + datetime.timedelta(minutes=5)
+        uuids_macs = {} 
+        for target_platform in target_platforms:
+            os_name, architecture = target_platform.os_name, target_platform.architecture
+            presents, machine = self.__vm_presents(os_name, architecture)
+            mac = vbox.get_mac_address(machine.uuid)
+            uuids_macs[machine.uuid] = mac
+        while (datetime.datetime.now() < time_end):
+            if len(uuids_macs) == 0:
+                break
+            uuid = uuids_macs.keys()[0]
+            mac = uuids_macs[uuid]
+            res, hostname, ipaddress = utils.find_ip_by_mac(mac)
+            if res:
+                print("Got IP {ipaddress} {hostname} for {mac}")
+                del uuids_macs[uuid]
+
+        assert len(uuids_macs) == 0, "Failed to get IP address for "+uuids_macs
+                
+                
+                
+                

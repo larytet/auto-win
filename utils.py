@@ -98,9 +98,17 @@ def umount_iso(mount_point):
 def source_root_folder():
     return os.path.dirname(os.path.realpath(__file__))
     
-def find_ip_by_mac():
+def find_ip_by_mac(macaddress):
     lines = []
-    res = run_shell_command("arp -a", "", lines)
+    res = run_shell_command("arp -a -n", None, lines)
+    assert res, "Failed to access the system arp table"
+    # I am expecting 'test-win-8-64.corp.cyren.com (172.20.21.114) at 08:00:27:25:8e:39 [ether] on enp0s31f6'
+    macaddress = macaddress.lower()
+    for line in lines:
+        m = re.match(f"(.+) \((.+)\) at {macaddress} .+", line)
+        if m:
+            return True, m.group(1), m.group(2)
+    return False, None, None 
     
 
     
