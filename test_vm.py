@@ -224,7 +224,7 @@ class TestInstallVm:
         Wait for the setup to complete
         '''
         vbox = virtualbox_shell.VirtualBox()
-        time_end = datetime.datetime.now() + datetime.timedelta(minutes=8)
+        time_end = datetime.datetime.now() + datetime.timedelta(minutes=20)
         uuids_macs = {} 
         for target_platform in target_platforms:
             os_name, architecture = target_platform.os_name, target_platform.architecture

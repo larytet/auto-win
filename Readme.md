@@ -20,18 +20,10 @@ Windows registry, invokes additional setup scritps.
 	sudo apt-get install virtualbox mkisofs
 	sudo apt-get install python3-pip
 	
-	# install VirtualBox SDK from https://www.virtualbox.org/wiki/Downloads
-	# Note - I configure the VMs without the SDK, but with command shell instead
-	# TODO - VirtualBox SDK and pyvbox did not work in my environment  
-	# wget http://download.virtualbox.org/virtualbox/5.2.2/VirtualBoxSDK-5.2.2-119230.zip
-	# unzip VirtualBoxSDK-5.2.2-119230.zip
-	# cd sdk/installer/
-	# sudo VBOX_INSTALL_PATH=/usr/lib/virtualboxpython3 python3.6 ./vboxapisetup.py install
- 
 	git clone git@github.com:larytet/auto-win.git
 	cd auto-win
 	sudo pip3 install -r requirements.txt
-	./create-floppy-disks.sh	
+	sudo ./create-floppy-disks.sh	
 	# Download a Windows ISO from https://www.microsoft.com/en-us/evalcenter/
 	# Flags:
 	# --cleanall to force reinstall of the machine
@@ -53,6 +45,16 @@ In the command line started as an administrator:
 	winrm set winrm/config/service/auth @{Basic="true"}
 	winrm set winrm/config/service @{AllowUnencrypted="true"}
 	
+Install VirtualBox SDK
+
+	install VirtualBox SDK from https://www.virtualbox.org/wiki/Downloads
+	# Note - I configure the VMs without the SDK, but with command shell instead
+	# TODO - VirtualBox SDK and pyvbox did not work in my environment  
+	wget http://download.virtualbox.org/virtualbox/5.2.2/VirtualBoxSDK-5.2.2-119230.zip
+	unzip VirtualBoxSDK-5.2.2-119230.zip
+	cd sdk/installer/
+	sudo VBOX_INSTALL_PATH=/usr/lib/virtualboxpython3 python3.6 ./vboxapisetup.py install
+ 
 		
 # Links
 
