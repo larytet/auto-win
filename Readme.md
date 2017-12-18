@@ -33,8 +33,11 @@ Windows registry, invokes additional setup scritps.
 	sudo pip3 install -r requirements.txt
 	./create-floppy-disks.sh	
 	# Download a Windows ISO from https://www.microsoft.com/en-us/evalcenter/
-	./run-test.sh --iso='./SW_DVD5_SA_Win_Ent_8_64BIT_English_Full_MLF_X18-16254.ISO' --os=win8:64 
-	./run-test.sh --iso=./SW_DVD5_WIN_ENT_10_1703_64BIT_English_MLF_X21-36478.ISO --os=win10:64 --cleanall --headless 
+	# Flags:
+	# --cleanall to force reinstall of the machine
+	# --headless to hide the VM console
+	#  See --help for more flags
+	./run-test.sh --iso='./SW_DVD5_SA_Win_Ent_8_64BIT_English_Full_MLF_X18-16254.ISO' --os=win8:64
 	
 # Tips
 
