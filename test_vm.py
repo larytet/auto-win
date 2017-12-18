@@ -205,7 +205,7 @@ class TestInstallVm:
             presents, machine = self.__vm_presents(os_name, architecture)
             mac = vbox.get_mac_address(machine.uuid)
             uuids_macs[machine.uuid] = mac
-        print("Waiting for ping from {uuids_macs}")
+        print(f"Waiting for ping from {uuids_macs}")
         while (datetime.datetime.now() < time_end):
             if len(uuids_macs) == 0:
                 break
@@ -213,7 +213,7 @@ class TestInstallVm:
             mac = uuids_macs[uuid]
             res, hostname, ipaddress = utils.find_ip_by_mac(mac)
             if res:
-                print("Got IP {ipaddress} {hostname} for {mac}")
+                print(f"Got IP {ipaddress} {hostname} for {mac}")
                 del uuids_macs[uuid]
             time.sleep(5.0)
 
