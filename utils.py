@@ -98,3 +98,9 @@ def umount_iso(mount_point):
 def source_root_folder():
     return os.path.dirname(os.path.realpath(__file__))
     
+def find_ip_by_mac():
+    lines = []
+    res = run_shell_command("arp -a", "", lines)
+    
+
+    

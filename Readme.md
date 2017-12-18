@@ -31,12 +31,7 @@ Windows registry, invokes additional setup scritps.
 	git clone git@github.com:larytet/auto-win.git
 	cd auto-win
 	sudo pip3 install -r requirements.txt
-	
-	printf "ping `hostname` -n 3\r\n" > ./autounattend/packer-floppy-win10/pinghost.bat
-	sudo ./create-floppy.py -i ./autounattend/packer-floppy-win10 -t . -o ./autounattend/Autounattend-win10-mbr.vfd
-	printf "ping `hostname` -n 3\r\n" > ./autounattend/packer-floppy-win10/pinghost.bat
-	sudo ./create-floppy.py -i ./autounattend/packer-floppy-win8 -t . -o ./autounattend/Autounattend-win8-mbr.vfd
-	
+	./create-floppy-disks.sh	
 	# Download a Windows ISO from https://www.microsoft.com/en-us/evalcenter/
 	./run-test.sh --iso='./SW_DVD5_SA_Win_Ent_8_64BIT_English_Full_MLF_X18-16254.ISO' --os=win8:64 
 	

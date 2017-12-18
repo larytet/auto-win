@@ -148,16 +148,16 @@ class VirtualBox():
         arguments = f"storageattach {uuid} --storagectl 'Floppy' --port 0 --device 0 --type fdd --medium {vfp_path}"
         self.__run_command(arguments, True)
 
-    def get_ip_address(self, uuid):
+    def get_mac_address(self, uuid):
         '''
         Hot tip: try 'VBoxManage guestproperty enumerate <machine.uuid>'
         VBoxManage showvminfo test.win10.64  --machinereadable | grep mac
         arp -a | grep "08:00:27"
         '''
-        arguments = f"guestproperty get {uuid} /VirtualBox/GuestInfo/Net/0/V4/IP"
+        arguments = f"VBoxManage showvminfo {uuid}  --machinereadable"
         lines = self.__run_command(arguments, True)
         for line in lines:
-            m = re.match('Value:\s+(.+)', line)
+            m = re.match('macaddress1=(.+)', line)
             if m:
                 return m.group(1)
         else:
