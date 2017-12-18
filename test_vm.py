@@ -239,9 +239,12 @@ class TestInstallVm:
             mac, machine_name = uuids_macs[uuid]
             res, hostname, ipaddress = utils.find_ip_by_mac(mac)
             if res:
-                res = utils.run_shell_command(f"ping -c 1 {ipaddress}")
+                res = utils.run_shell_command(f"ping -c 1 {ipaddress}", None, None, True)
                 if res:
                     print(f"Got a response from {ipaddress} {hostname} for {mac} {machine_name} {uuid}")
                     del uuids_macs[uuid]
             time.sleep(5.0)
         assert len(uuids_macs) == 0, "Failed to get a response to ping for "+str(uuids_macs)
+
+    def test_wait_for_ssh(self, target_platforms):
+        pass
