@@ -154,8 +154,8 @@ class VirtualBox():
         VBoxManage showvminfo test.win10.64  --machinereadable | grep mac
         arp -a | grep "08:00:27"
         '''
-        arguments = f"VBoxManage showvminfo {uuid}  --machinereadable"
-        lines = self.__run_command(arguments, True)
+        arguments = f"showvminfo {uuid}  --machinereadable"
+        lines = self.__run_command(arguments, False)
         for line in lines:
             m = re.match('macaddress1=\"(.+)\"', line)
             if m:

@@ -39,8 +39,8 @@ def run_shell_command(command, log_prompt=None, lines=None):
     @param log_prompt - if not None send the output to stdout 
     '''
     print(f"{command}")
-    if log_prompt == None:
-        log_prompt = "\t"
+    #if log_prompt == None:
+    #    log_prompt = "\t"
     p = subprocess.Popen(["bash", "-c", command], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     process_ended = False
     while True:
