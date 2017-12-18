@@ -187,6 +187,9 @@ class TestInstallVm:
                 vbox.set_network_adapter(machine.uuid, adapter_name)
 
     def test_start_machines(self, target_platforms, headless_vms, dryrun):
+        '''
+        Start required VMs
+        '''
         vbox = virtualbox_shell.VirtualBox()
         for target_platform in target_platforms:
             os_name, architecture = target_platform.os_name, target_platform.architecture
@@ -197,6 +200,10 @@ class TestInstallVm:
                 vbox.start_machine(machine.uuid, headless_vms)
                 
     def test_wait_for_ip(self, target_platforms):
+        '''
+        Wait for the VM to boot. Can be a fresh VM which running the setup
+        Wait for the setup to complete
+        '''
         vbox = virtualbox_shell.VirtualBox()
         time_end = datetime.datetime.now() + datetime.timedelta(minutes=5)
         uuids_macs = {} 
@@ -204,16 +211,16 @@ class TestInstallVm:
             os_name, architecture = target_platform.os_name, target_platform.architecture
             presents, machine = self.__vm_presents(os_name, architecture)
             mac = vbox.get_mac_address(machine.uuid)
-            uuids_macs[machine.uuid] = mac
+            uuids_macs[machine.uuid] = (mac, machine.name)
         print(f"Waiting for ping from {uuids_macs}")
         while (datetime.datetime.now() < time_end):
             if len(uuids_macs) == 0:
                 break
             uuid = next(iter(uuids_macs))
-            mac = uuids_macs[uuid]
+            mac, machine_name = uuids_macs[uuid]
             res, hostname, ipaddress = utils.find_ip_by_mac(mac)
             if res:
-                print(f"Got IP {ipaddress} {hostname} for {mac}")
+                print(f"Got IP {ipaddress} {hostname} for {mac} {machine_name} {uuid}")
                 del uuids_macs[uuid]
             time.sleep(5.0)
 
