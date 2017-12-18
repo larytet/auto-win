@@ -35,6 +35,11 @@ def pytest_addoption(parser):
                      default=False,
                      help="Start VMs headless")
     
+    parser.addoption("--dryrun", 
+                     action="store_true", 
+                     default=False,
+                     help="Do not modify VMs")
+    
     
 TargetPlatform = namedtuple('TargetPlatform', ['os_name', 'architecture'])
 TargetPlatforms = []
@@ -83,3 +88,8 @@ def remove_vms(request):
 def headless_vms(request):
     headless = request.config.getoption("--headless_vms")
     return not headless
+
+@pytest.fixture
+def dryrun(request):
+    dryrun = request.config.getoption("--dryrun")
+    return not dryrun

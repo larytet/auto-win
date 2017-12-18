@@ -81,7 +81,7 @@ class TestInstallVm:
         assert virtualbox_shell.VirtualBox().is_ready(), "No VBoxManage in the path? Try apt-get install virtualbox"
         #assert utils.executable_exists("fuseiso"), "No fuseiso? Try apt-get install fuseiso"
         
-    def test_stop_machines(self, target_platforms):
+    def test_stop_machines(self, target_platforms, dryrun):
         '''
         Stop all running VMs before I start to modify them
         '''
@@ -90,11 +90,12 @@ class TestInstallVm:
             running, vm = self.__vm_running(target_platform.os_name, target_platform.architecture)
             if running:
                 print(f"Stop {vm.name}")
-                vbox.stop_machine(vm.uuid)
+                if not dryrun:
+                    vbox.stop_machine(vm.uuid)
         # a short delay in case a human being watches the GUI - all VNs are disappearing here
         time.sleep(0.5)
 
-    def test_remove_machines(self, remove_vms, target_platforms):
+    def test_remove_machines(self, remove_vms, target_platforms, dryrun):
         if not remove_vms:
             return
         print("Removing all VMs")
@@ -103,7 +104,8 @@ class TestInstallVm:
             presents, vm = self.__vm_presents(target_platform.os_name, target_platform.architecture)
             if presents:
                 print(f"Remove {vm.name}")
-                vbox.remove_machine(vm.uuid)
+                if not dryrun:
+                    vbox.remove_machine(vm.uuid)
         # a short delay in case a human being watches the GUI - all VNs are disappearing here
         time.sleep(0.5)
             
@@ -115,17 +117,21 @@ class TestInstallVm:
         source_root = utils.source_root_folder()
         return f"export SRCROOT={source_root};sudo -E $SRCROOT/create-floppy.py -i $SRCROOT/autounattend/packer-floppy-{os_name} -t . -o $SRCROOT/autounattend/Autounattend-{os_name}-mbr.vfd"
 
-    def __setup_machine(self, target_platform, settings_file, uuid, adapter_name):            
+    def __setup_machine(self, target_platform, settings_file, uuid, dryrun):            
         vbox = virtualbox_shell.VirtualBox()
         memory = 2*1024
         os_name, architecture = target_platform.os_name, target_platform.architecture
         presents, machine = self.__vm_presents(os_name, architecture)
         assert presents, f"Failed to find machine {os_name} {architecture}"           
-        vbox.set_machine(machine.uuid, memory)
-        vbox.add_hard_disk(settings_file, uuid, 32*1024)
+        print(f"Set memory size {memory}")
+        if not dryrun:
+            vbox.set_machine(machine.uuid, memory)
+        print(f"Add hard disk to {uuid}")
+        if not dryrun:
+            vbox.add_hard_disk(settings_file, uuid, 32*1024)
             
         
-    def test_install_machines(self, target_platforms, isos):
+    def test_install_machines(self, target_platforms, isos, dryrun):
         '''
         Collect list of missing VMs
         '''
@@ -155,23 +161,26 @@ class TestInstallVm:
             iso = isos[index]
             assert len(isos) > index, f"No ISO is specified for the missing {target_platform}"
             uuid, settings_file = self.__install_machine(os_name, architecture)
-            self.__setup_machine(target_platform, settings_file, uuid, adapter_name)
+            if not dryrun:
+                self.__setup_machine(target_platform, settings_file, uuid, dryrun)
             vbox = virtualbox_shell.VirtualBox()
-            vbox.add_boot_disk(uuid, iso)
-            vbox.add_floppy_disk(uuid, autounattend_vfd)
+            if not dryrun:
+                vbox.add_boot_disk(uuid, iso)
+                vbox.add_floppy_disk(uuid, autounattend_vfd)
 
         vbox = virtualbox_shell.VirtualBox()
         # patch for the laptops which switch between adapters often
         for target_platform in target_platforms:
             os_name, architecture = target_platform.os_name, target_platform.architecture
             presents, machine = self.__vm_presents(os_name, architecture)
-            vbox.set_network_adapter(machine.uuid, adapter_name)
+            if not dryrun:
+                vbox.set_network_adapter(machine.uuid, adapter_name)
 
-    def test_start_machines(self, target_platforms, headless_vms):
+    def test_start_machines(self, target_platforms, headless_vms, dryrun):
         vbox = virtualbox_shell.VirtualBox()
         for target_platform in target_platforms:
             os_name, architecture = target_platform.os_name, target_platform.architecture
             presents, machine = self.__vm_presents(os_name, architecture)
             assert presents, "At this point the VM shall exist"
-            vbox.start_machine(machine.uuid, headless_vms)
-
+            if dryrun:
+                vbox.start_machine(machine.uuid, headless_vms)
