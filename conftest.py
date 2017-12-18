@@ -25,6 +25,10 @@ def pytest_addoption(parser):
                      metavar="ISO",
                      help="ISO file for installation of missing operating systems. ISOs should be specified in the same order as --os. This option can be used more than once")
 
+    parser.addoption("--cleanall", 
+                     action="store_true", 
+                     default=False,
+                     help="Start from scratch: remove all VMs")
     
 TargetPlatform = namedtuple('TargetPlatform', ['os_name', 'architecture'])
 TargetPlatforms = []
@@ -64,4 +68,7 @@ def isos(request):
         iso_path = []
     return iso_path
 
-
+@pytest.fixture
+def remove_vms(request):
+    cleanall = request.config.getoption("--cleanall")
+    return not cleanall

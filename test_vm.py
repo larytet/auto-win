@@ -82,6 +82,9 @@ class TestInstallVm:
         #assert utils.executable_exists("fuseiso"), "No fuseiso? Try apt-get install fuseiso"
         
     def test_stop_machines(self, target_platforms):
+        '''
+        Stop all running VMs before I start to modify them
+        '''
         vbox = virtualbox_shell.VirtualBox()
         for target_platform in target_platforms:
             running, vm = self.__vm_running(target_platform.os_name, target_platform.architecture)
@@ -90,7 +93,10 @@ class TestInstallVm:
         # a short delay in case a human being watches the GUI - all VNs are disappearing here
         time.sleep(0.5)
 
-    def t1est_remove_machines(self, target_platforms):
+    def test_remove_machines(self, remove_vms, target_platforms):
+        if not remove_vms:
+            return
+        print("Removing all VMs")
         vbox = virtualbox_shell.VirtualBox()
         for target_platform in target_platforms:
             presents, vm = self.__vm_presents(target_platform.os_name, target_platform.architecture)
