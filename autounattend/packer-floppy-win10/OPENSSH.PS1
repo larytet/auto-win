@@ -14,7 +14,7 @@ else {
 }
 
 Write-Output "Downloading $cygwin_download_url"
-(New-Object System.Net.WebClient).DownloadFile($cygwin_download_url, "C:\Users\User\setup-x86.exe")
+(New-Object System.Net.WebClient).DownloadFile($cygwin_download_url, "C:\Windows\Temp\setup-x86.exe")
 
 # setup openssh
 $ssh_download_url = "http://www.mls-software.com/files/setupssh-7.1p1-1.exe"
