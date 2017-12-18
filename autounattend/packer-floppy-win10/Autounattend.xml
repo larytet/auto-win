@@ -279,7 +279,7 @@
                     <RequiresUserInput>true</RequiresUserInput>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <CommandLine>cmd.exe /c "C:\Windows\Temp\setup-x86.exe" -q  -R C:\Windows\Temp  -l C:\cygwin --packages "wget,zip,screen" -s http://cygwin.mirror.constant.com</CommandLine>
+                    <CommandLine>cmd.exe /c "C:\Windows\Temp\setup-x86.exe" -q -a x86 -R C:\Windows\Temp  -l C:\cygwin --packages "wget,zip,screen" -s http://cygwin.mirror.constant.com</CommandLine>
                     <Description>Install OpenSSH</Description>
                     <Order>99</Order>
                     <RequiresUserInput>true</RequiresUserInput>
