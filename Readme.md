@@ -82,6 +82,7 @@ Install VirtualBox SDK
 * https://github.com/mjdorma/pyvbox/issues/99
 * https://github.com/joefitzgerald/packer-windows/issues/239
 * https://github.com/joefitzgerald/packer-windows/issues/248
+* https://github.com/joefitzgerald/packer-windows/issues/256
 
 
 
