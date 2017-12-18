@@ -66,7 +66,7 @@ def executable_exists(name):
 
 def get_connected_network_adapter():
     lines = []
-    run_shell_command("ifconfig", None, lines)
+    run_shell_command("ifconfig", "", lines)
     adapter_name = None
     ip_address = None
     for line in lines:
