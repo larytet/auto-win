@@ -157,6 +157,10 @@ class VirtualBox():
                 return m.group(1)
         else:
             return None
+        
+    def stop_machine(self, uuid):
+        arguments = f"VBoxManage controlvm {uuid} savestate"
+        self.__run_command(arguments, True)
 
     def register_machine(self, name):
         pass
