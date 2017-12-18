@@ -164,6 +164,10 @@ class VirtualBox():
     def stop_machine(self, uuid):
         arguments = f"controlvm {uuid} savestate"
         self.__run_command(arguments, True)
+    
+    def power_down_machine(self, uuid):
+        arguments = f"controlvm {uuid} poweroff"
+        self.__run_command(arguments, True)
 
     def start_machine(self, uuid, headless):
         if headless:

@@ -91,7 +91,8 @@ class TestInstallVm:
             if running:
                 print(f"Stop {vm.name}")
                 if not dryrun:
-                    vbox.stop_machine(vm.uuid)
+                    #vbox.stop_machine(vm.uuid)
+                    vbox.power_down_machine(vm.uuid)
         # a short delay in case a human being watches the GUI - all VNs are disappearing here
         time.sleep(0.5)
 
