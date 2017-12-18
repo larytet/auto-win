@@ -32,13 +32,14 @@ def __run_shell_command_read_output(p, log_prompt=None, lines=None):
         lines.append(nextline)
     return res
         
-def run_shell_command(command, log_prompt=None, lines=None):
+def run_shell_command(command, log_prompt=None, lines=None, silent=False):
     '''
     Execute the specified shell command, return result
     @param lines - if the list is not None collect the output
     @param log_prompt - if not None send the output to stdout 
     '''
-    print(f"{command}")
+    if not silent:
+        print(f"{command}")
     #if log_prompt == None:
     #    log_prompt = "\t"
     p = subprocess.Popen(["bash", "-c", command], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -56,7 +57,8 @@ def run_shell_command(command, log_prompt=None, lines=None):
     
     if exitcode != 0:
         print(f"Command {command} failed")
-    print("Done {0} ...".format(command[:20]))
+    if not silent:
+        print("Done {0} ...".format(command[:20]))
 
     
     return exitcode == 0
@@ -100,7 +102,7 @@ def source_root_folder():
     
 def find_ip_by_mac(macaddress):
     lines = []
-    res = run_shell_command("arp -a -n", None, lines)
+    res = run_shell_command("arp -a -n", None, lines, True)
     assert res, "Failed to access the system arp table"
     # I am expecting 'test-win-8-64.corp.cyren.com (172.20.21.114) at 08:00:27:25:8e:39 [ether] on enp0s31f6'
     macaddress = macaddress.lower()

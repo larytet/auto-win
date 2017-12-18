@@ -218,7 +218,3 @@ class TestInstallVm:
             time.sleep(5.0)
 
         assert len(uuids_macs) == 0, "Failed to get IP address for "+uuids_macs
-                
-                
-                
-                
