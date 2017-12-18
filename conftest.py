@@ -82,14 +82,14 @@ def isos(request):
 @pytest.fixture
 def remove_vms(request):
     cleanall = request.config.getoption("--cleanall")
-    return not cleanall
+    return cleanall
 
 @pytest.fixture
 def headless_vms(request):
     headless = request.config.getoption("--headless_vms")
-    return not headless
+    return headless
 
 @pytest.fixture
 def dryrun(request):
     dryrun = request.config.getoption("--dryrun")
-    return not dryrun
+    return dryrun

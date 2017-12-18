@@ -182,5 +182,5 @@ class TestInstallVm:
             os_name, architecture = target_platform.os_name, target_platform.architecture
             presents, machine = self.__vm_presents(os_name, architecture)
             assert presents, "At this point the VM shall exist"
-            if dryrun:
+            if not dryrun:
                 vbox.start_machine(machine.uuid, headless_vms)
