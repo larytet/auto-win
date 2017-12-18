@@ -11,4 +11,4 @@ else {
 Write-Output "Downloading $cygwin_download_url"
 (New-Object System.Net.WebClient).DownloadFile($cygwin_download_url, "C:\Windows\Temp\setup-x86.exe")
 
-Start-Process "C:\Windows\Temp\setup-x86.exe" -ArgumentList "-q -R C:\cygwin -l C:\Windows\Temp --packages \"wget,zip,screen\" -s http://cygwin.mirror.constant.com" -WorkingDirectory "C:\Windows\Temp" -NoNewWindow -Wait
+Start-Process "C:\Windows\Temp\setup-x86.exe" -ArgumentList "-q -R C:\cygwin -l C:\Windows\Temp --packages `"wget,zip,screen`" -s http://cygwin.mirror.constant.com" -WorkingDirectory "C:\Windows\Temp" -NoNewWindow -Wait
