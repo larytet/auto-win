@@ -7,6 +7,7 @@ $is_64bit = [IntPtr]::size -eq 8
 
 # get cygwin
 if ($is_64bit) {
+    # $cygwin_download_url = "https://www.cygwin.com/setup-x86_64.exe"
     $cygwin_download_url = "https://www.cygwin.com/setup-x86_64.exe"
 }
 else {
