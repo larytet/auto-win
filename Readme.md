@@ -27,8 +27,8 @@ Windows version. The Windows setup will run automatically thanks to the floppy d
 	cd auto-win
 	sudo pip3 install -r requirements.txt
 	
-	export SRCROOT=$PWD;sudo -E $SRCROOT/create-floppy.py -i $SRCROOT/autounattend/packer-floppy-10 -t . -o $SRCROOT/autounattend/Autounattend-win10-mbr.vfd
-	export SRCROOT=$PWD;sudo -E $SRCROOT/create-floppy.py -i $SRCROOT/autounattend/packer-floppy-8 -t . -o $SRCROOT/autounattend/Autounattend-win8-mbr.vfd
+	sudo ./create-floppy.py -i ./autounattend/packer-floppy-10 -t . -o ./autounattend/Autounattend-win10-mbr.vfd
+	sudo ./create-floppy.py -i ./autounattend/packer-floppy-8 -t . -o ./autounattend/Autounattend-win8-mbr.vfd
 	
 	# Download a Windows ISO from https://www.microsoft.com/en-us/evalcenter/
 	./run-test.sh --iso='./SW_DVD5_SA_Win_Ent_8_64BIT_English_Full_MLF_X18-16254.ISO' --os=win8:64 
