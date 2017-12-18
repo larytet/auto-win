@@ -165,7 +165,10 @@ class TestInstallVm:
                 self.__setup_machine(target_platform, settings_file, uuid, dryrun)
             vbox = virtualbox_shell.VirtualBox()
             if not dryrun:
+                print(f"Add boot ISO {iso} to {uuid}")
                 vbox.add_boot_disk(uuid, iso)
+            if not dryrun:
+                print(f"Add floppy ISO {autounattend_vfd} to {uuid}")
                 vbox.add_floppy_disk(uuid, autounattend_vfd)
 
         vbox = virtualbox_shell.VirtualBox()
@@ -173,6 +176,7 @@ class TestInstallVm:
         for target_platform in target_platforms:
             os_name, architecture = target_platform.os_name, target_platform.architecture
             presents, machine = self.__vm_presents(os_name, architecture)
+            print(f"Setup network addater {adapter_name} to {uuid}")
             if not dryrun:
                 vbox.set_network_adapter(machine.uuid, adapter_name)
 
@@ -182,5 +186,6 @@ class TestInstallVm:
             os_name, architecture = target_platform.os_name, target_platform.architecture
             presents, machine = self.__vm_presents(os_name, architecture)
             assert presents, "At this point the VM shall exist"
+            print(f"Start machine {machine.uuid}, headless is {headless_vms}")
             if not dryrun:
                 vbox.start_machine(machine.uuid, headless_vms)
