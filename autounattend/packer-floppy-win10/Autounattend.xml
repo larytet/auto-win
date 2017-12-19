@@ -97,7 +97,7 @@
                             <Value>user</Value>
                             <PlainText>true</PlainText>
                         </Password>
-                        <Description>Vagrant User</Description>
+                        <Description>Test User</Description>
                         <DisplayName>user</DisplayName>
                         <Group>Users</Group>
                         <Name>user</Name>
