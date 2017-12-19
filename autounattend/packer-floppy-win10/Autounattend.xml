@@ -278,13 +278,13 @@
                     <Order>97</Order>
                     <RequiresUserInput>true</RequiresUserInput>
                 </SynchronousCommand>
-                <SynchronousCommand wcm:action="add">
+               <SynchronousCommand wcm:action="add">
                     <CommandLine>%SystemRoot%\System32\reg.exe ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v EnableLUA /t REG_DWORD /d 1 /f</CommandLine>
                     <Description>Enable UAC</Description>
                     <Order>98</Order>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <CommandLine>cmd.exe /c "C:\Windows\Temp\setup-x86.exe" -q -a x86 -R C:\Windows\Temp  -l C:\cygwin --packages "wget,zip,screen" -s http://cygwin.mirror.constant.com</CommandLine>
+                    <CommandLine>cmd.exe /c C:\Users\user\Downloads\setup-x86.exe -q -R C:\cygwin -s http://cygwin.mirror.constant.com -P "wget,screen,cat" -a x86 -v -B -d -n -N</CommandLine>
                     <Description>Install cygwin</Description>
                     <Order>99</Order>
                     <RequiresUserInput>true</RequiresUserInput>
