@@ -75,7 +75,7 @@ if __name__ == '__main__':
         break
     
     if not res:
-        print(msg)
+        print(utils.bcolors.FAIL+msg+utils.bcolors.ENDC)
     
     if os.path.dirname(mount_point):
         utils.run_shell_command(f"umount {mount_point}", "", None)

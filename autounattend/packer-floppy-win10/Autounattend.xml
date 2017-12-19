@@ -99,7 +99,7 @@
                         </Password>
                         <Description>Vagrant User</Description>
                         <DisplayName>user</DisplayName>
-                        <Group>administrators</Group>
+                        <Group>Users</Group>
                         <Name>user</Name>
                     </LocalAccount>
                 </LocalAccounts>
