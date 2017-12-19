@@ -72,6 +72,7 @@ Install VirtualBox SDK
 * http://www.mls-software.com OpenSSH for Windows
 * https://superuser.com/questions/531787/starting-windows-gui-program-in-windows-through-cygwin-sshd-from-ssh-client Open GUI applications via SSH
 * https://stackoverflow.com/questions/745275/can-i-script-a-cygwin-install-to-include-certain-packages/7366200#7366200 
+* http://www.noah.org/ssh/cygwin-sshd.html
 * https://cygwin.com/ml/cygwin/2011-12/msg00488.html and https://cygwin.com/setup/setup-2.762.exe
 * 
 
