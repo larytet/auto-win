@@ -284,7 +284,7 @@
                     <Order>98</Order>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <CommandLine>cmd.exe /c C:\Users\user\Downloads\setup-x86.exe -q -R C:\cygwin -s http://mirrors.kernel.org/sourceware/cygwin -P "wget,screen,cat,openssh,procps-ng,rsync" -a x86 -v -B -d -n -N</CommandLine>
+                    <CommandLine>cmd.exe /c C:\Users\user\Downloads\setup-x86.exe -q -R C:\cygwin -s http://mirrors.kernel.org/sourceware/cygwin -P "wget,screen,openssh,procps-ng,rsync,vim,which,coreutils,bash,findutils,grep,zlib,tar" -a x86 -v -B -d -n -N</CommandLine>
                     <Description>Install cygwin</Description>
                     <Order>99</Order>
                     <RequiresUserInput>true</RequiresUserInput>
