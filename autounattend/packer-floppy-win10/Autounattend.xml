@@ -99,7 +99,7 @@
                         </Password>
                         <Description>Test User</Description>
                         <DisplayName>user</DisplayName>
-                        <Group>Users</Group>
+                        <Group>administrators</Group>
                         <Name>user</Name>
                     </LocalAccount>
                 </LocalAccounts>
