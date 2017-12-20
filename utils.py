@@ -113,5 +113,21 @@ def find_ip_by_mac(macaddress):
             return True, m.group(1), m.group(2)
     return False, None, None 
     
-
+def connect_ssh(hostname):
+    ssh = None
+    err_msg = None
+    try:
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(hostname, 22, "user", "user")
+    except paramiko.AuthenticationException:
+        err_msg = "Authentication failed when connecting" 
+        return False, ssh, err_msg    
+    except Exception as exc:
+        err_msg = "Failed to connect"+str(exc) 
+        return False, ssh, err_msg    
+        
+    return True, ssh, "Ok"
+    
+    
     

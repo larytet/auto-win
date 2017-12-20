@@ -41,7 +41,6 @@ def pytest_addoption(parser):
                      help="Do not modify VMs")
     
     
-TargetPlatform = namedtuple('TargetPlatform', ['os_name', 'architecture'])
 TargetPlatforms = []
     
 def pytest_configure(config):
@@ -63,10 +62,10 @@ def pytest_configure(config):
             os_name = target_name
         assert(architecture in ["32", "64"])
         assert(os_name in ["win8", "win10"])
-        TargetPlatforms.append(TargetPlatform(os_name, architecture))
+        TargetPlatforms.append({"os_name":os_name, "architecture":architecture})
 
     if not len(TargetPlatforms):
-        TargetPlatforms.append(TargetPlatform("win8", "64"))
+        TargetPlatforms.append({"os_name":"win8", "architecture":"64"})
 
 @pytest.fixture
 def target_platforms(request):

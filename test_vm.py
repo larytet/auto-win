@@ -88,7 +88,7 @@ class TestInstallVm:
         '''
         vbox = virtualbox_shell.VirtualBox()
         for target_platform in target_platforms:
-            running, vm = self.__vm_running(target_platform.os_name, target_platform.architecture)
+            running, vm = self.__vm_running(target_platform["os_name"], target_platform["architecture"])
             if running:
                 print(f"Stop {vm.name}")
                 if not dryrun:
@@ -105,7 +105,7 @@ class TestInstallVm:
         print("Removing all VMs")
         vbox = virtualbox_shell.VirtualBox()
         for target_platform in target_platforms:
-            presents, vm = self.__vm_presents(target_platform.os_name, target_platform.architecture)
+            presents, vm = self.__vm_presents(target_platform["os_name"], target_platform["architecture"])
             if presents:
                 print(f"Remove {vm.name}")
                 if not dryrun:
@@ -122,7 +122,7 @@ class TestInstallVm:
         time_end = datetime.datetime.now() + datetime.timedelta(minutes=8)
         uuids_macs = {} 
         for target_platform in target_platforms:
-            os_name, architecture = target_platform.os_name, target_platform.architecture
+            os_name, architecture = target_platform["os_name"], target_platform["architecture"]
             presents, machine = self.__vm_presents(os_name, architecture)
             if not presents:
                 continue
@@ -143,7 +143,7 @@ class TestInstallVm:
     def __setup_machine(self, target_platform, settings_file, uuid, dryrun):            
         vbox = virtualbox_shell.VirtualBox()
         memory = 2*1024
-        os_name, architecture = target_platform.os_name, target_platform.architecture
+        os_name, architecture = target_platform["os_name"], target_platform["architecture"]
         presents, machine = self.__vm_presents(os_name, architecture)
         assert presents, f"Failed to find machine {os_name} {architecture}"           
         print(f"Set memory size {memory}")
@@ -161,7 +161,7 @@ class TestInstallVm:
         print(target_platforms)
         index = 0
         for target_platform in target_platforms:
-            presents, _ = self.__vm_presents(target_platform.os_name, target_platform.architecture)
+            presents, _ = self.__vm_presents(target_platform["os_name"], target_platform["architecture"])
             if not presents:
                 missing_platforms.append((index, target_platform))
             index += 1
@@ -174,7 +174,7 @@ class TestInstallVm:
             print(f"Missing: {missing_platforms}")
             
         for index, target_platform in missing_platforms:
-            os_name, architecture = target_platform.os_name, target_platform.architecture
+            os_name, architecture = target_platform["os_name"], target_platform["architecture"]
             autounattend_vfd = self.__get_autounattend_vfd(os_name)
             if not os.path.isfile(autounattend_vfd):
                 autounattend_command = self.__get_autounattend_vfd_command(os_name)
@@ -183,6 +183,7 @@ class TestInstallVm:
             iso = isos[index]
             assert len(isos) > index, f"No ISO is specified for the missing {target_platform}"
             uuid, settings_file = self.__install_machine(os_name, architecture)
+            target_platform["uuid"] = uuid 
             if not dryrun:
                 self.__setup_machine(target_platform, settings_file, uuid, dryrun)
             vbox = virtualbox_shell.VirtualBox()
@@ -199,7 +200,7 @@ class TestInstallVm:
         # network interface 
         # The patch is for laptops which switch between WiFi/Wired interfacces often
         for target_platform in target_platforms:
-            os_name, architecture = target_platform.os_name, target_platform.architecture
+            os_name, architecture = target_platform["os_name"], target_platform["architecture"]
             presents, machine = self.__vm_presents(os_name, architecture)
             print(f"Setup network addater {adapter_name} to {machine.uuid}")
             if not dryrun:
@@ -211,7 +212,7 @@ class TestInstallVm:
         '''
         vbox = virtualbox_shell.VirtualBox()
         for target_platform in target_platforms:
-            os_name, architecture = target_platform.os_name, target_platform.architecture
+            os_name, architecture = target_platform["os_name"], target_platform["architecture"]
             presents, machine = self.__vm_presents(os_name, architecture)
             assert presents, "At this point the VM shall exist"
             print(f"Start machine {machine.uuid}, headless is {headless_vms}")
@@ -224,14 +225,15 @@ class TestInstallVm:
         Wait for the setup to complete
         '''
         vbox = virtualbox_shell.VirtualBox()
-        time_end = datetime.datetime.now() + datetime.timedelta(minutes=20)
         uuids_macs = {} 
         for target_platform in target_platforms:
-            os_name, architecture = target_platform.os_name, target_platform.architecture
+            os_name, architecture = target_platform["os_name"], target_platform["architecture"]
             presents, machine = self.__vm_presents(os_name, architecture)
             mac = vbox.get_mac_address(machine.uuid)
+            target_platform["mac"] = mac 
             uuids_macs[machine.uuid] = (mac, machine.name)
         print(f"Waiting for ping from {uuids_macs}")
+        time_end = datetime.datetime.now() + datetime.timedelta(minutes=20)
         while (datetime.datetime.now() < time_end):
             if len(uuids_macs) == 0:
                 break
@@ -242,9 +244,25 @@ class TestInstallVm:
                 res = utils.run_shell_command(f"ping -c 1 {ipaddress}", None, None, True)
                 if res:
                     print(f"Got a response from {ipaddress} {hostname} for {mac} {machine_name} {uuid}")
+                    target_platform["ipaddress"] = ipaddress
                     del uuids_macs[uuid]
             time.sleep(5.0)
         assert len(uuids_macs) == 0, "Failed to get a response to ping for "+str(uuids_macs)
 
     def test_wait_for_ssh(self, target_platforms):
-        pass
+        hosts = []
+        for target_platform in target_platforms:
+            hosts.append(target_platform["ipaddress"])
+            
+        print(f"Waiting for SSH server")
+        time_end = datetime.datetime.now() + datetime.timedelta(minutes=1)
+        while (datetime.datetime.now() < time_end):
+            if not len(hosts):
+                break
+            host = hosts[0]
+            res, _, _ = utils.connect_ssh(host)
+            if res:
+                hosts.pop()
+            time.sleep(1.0)
+
+        assert len(hosts) == 0, "Failed to connect with SSH to "+str(hosts)
