@@ -6,6 +6,7 @@ import subprocess
 import sys
 import re
 import os
+import paramiko
 
 
 class bcolors:

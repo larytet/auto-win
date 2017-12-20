@@ -292,7 +292,7 @@
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>cmd.exe /c "C:\Users\User\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\start_screen.cmd"</CommandLine>
-                    <Description>Install OpenSSH</Description>
+                    <Description>Start screen session and SSH server right after installation</Description>
                     <Order>98</Order>
                     <RequiresUserInput>true</RequiresUserInput>
                 </SynchronousCommand>
