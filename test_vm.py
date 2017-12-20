@@ -256,7 +256,7 @@ class TestInstallVm:
         # I need ~2-3 minutes for Cygwin download and SSH server installation
         time_end = datetime.datetime.now() + datetime.timedelta(minutes=5)
         while len(hosts) and (datetime.datetime.now() < time_end):
-            host, target_platform = hosts.pop()
+            target_platform, host = hosts.pop()
             ssh = utils.SSH("user", "user")
             res, err_msg = ssh.connect(host)
             target_platform["err_msg"] = err_msg

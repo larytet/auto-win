@@ -133,6 +133,7 @@ class SSH:
             return False, err_msg    
             
         self.ssh = ssh
+        self.hostname = hostname
         return True, "Ok"
 
     def get(self):
@@ -142,9 +143,11 @@ class SSH:
         self.screen_name = name
         
     def run_command_in_screen(self, command):
-        stdin, stdout, stderr = self.ssh.exec_command(f'screen -r {self.screen_name}')
-        if "There is no screen" in stderr.out():
+        res, stdin, stdout, stderr = self.run_command(f'screen -r {self.screen_name}')
+        if res and "There is no screen" in stderr.out():
             return False, "Failed to connect to screen "+self.screen_name
+        if not res:
+            return False, "Connectiton to "+self.hostname+ " failed"
         try:
             stdin, stdout, stderr = self.ssh.exec_command(command)
         except:
@@ -152,5 +155,18 @@ class SSH:
         finally:
             pass
         
+    def run_command(self, command):
+        try:
+            stdin, stdout, stderr = self.ssh.exec_command(f'screen -r {self.screen_name}')
+            return True, stdin, stdout, stderr
+        except:
+            self.ssh = None
+            self.hostname = None
+            return False, None, None, None
     
+    def shutdown_os(self, os_name):
+        command = {"win10":"shutdown \t 0"}[os_name]
+        stdin, stdout, stderr = self.run_command(f'{command}')
+        return True
+        
     
