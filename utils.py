@@ -165,8 +165,8 @@ class SSH:
             return False, None, None, None
     
     def shutdown_os(self, os_name):
-        command = {"win10":"shutdown \t 0"}[os_name]
-        stdin, stdout, stderr = self.run_command(f'{command}')
-        return True
+        command = {"win10":"shutdown /s /t 0"}[os_name]
+        res, stdin, stdout, stderr = self.run_command(f'{command}')
+        return res
         
     

@@ -130,7 +130,7 @@ class TestInstallVm:
             res, hostname, ipaddress = utils.find_ip_by_mac(mac)
             if not res:
                 continue
-            utils.run_shell_command(f"ping -c 3 {ipaddress}")
+            utils.run_shell_command(f"ping -c 1 {ipaddress}")
             
     def __get_autounattend_vfd(self, os_name):
         source_root = utils.source_root_folder()
@@ -256,7 +256,7 @@ class TestInstallVm:
         # I need ~2-3 minutes for Cygwin download and SSH server installation
         time_end = datetime.datetime.now() + datetime.timedelta(minutes=5)
         while len(hosts) and (datetime.datetime.now() < time_end):
-            target_platform, host = hosts.pop()
+            (target_platform), host = hosts.pop()
             ssh = utils.SSH("user", "user")
             res, err_msg = ssh.connect(host)
             target_platform["err_msg"] = err_msg
@@ -269,4 +269,8 @@ class TestInstallVm:
 
         assert len(hosts) == 0, "Failed to connect with SSH to "+str(hosts)
 
-    
+    def test_shutdown_all(self, target_platforms):
+        for target_platform in target_platforms:
+            ssh = target_platform["ssh"]
+            os_name = target_platform["os_name"]
+            ssh.shutdown_os(os_name)
