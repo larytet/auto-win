@@ -16,10 +16,8 @@ chdir C:\cygwin\bin
 set HOME=\cygwin\home\user
 echo Calling bash
 bash --login -i `"/home/user/start_screen.sh`"
-sleep 30
 "@
 $StartScreenBat | Out-File -FilePath "C:\Users\User\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\start_screen.cmd" -Encoding ASCII
-Start-Sleep -s 30
 
 Write-Output "Create input file for ssh-host-config C:\cygwin\home\user\password"
 $SshConfigInput = @"
@@ -27,7 +25,6 @@ user
 user
 "@
 $SshConfigInput | Out-File -FilePath "C:\cygwin\home\user\password" -Encoding ASCII
-Start-Sleep -s 30
 
 # I iwll run this BASH script every time user logins
 # This is a real Linux bash script with Unix end of line 
@@ -39,4 +36,3 @@ cygrunsrv -S sshd
 screen -dmS `"main`"
 "@
 $StartScreenSh | Out-File -FilePath "C:\cygwin\home\user\start_screen.sh" -Encoding ASCII
-Start-Sleep -s 30
