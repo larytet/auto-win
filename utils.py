@@ -119,22 +119,20 @@ class SSH():
         self.ssh = None
     
     def connect(self, hostname):
-             
-def connect_ssh(hostname):
-    ssh = None
-    err_msg = None
-    try:
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(hostname, 22, "user", "user")
-    except paramiko.AuthenticationException:
-        err_msg = "Authentication failed when connecting" 
-        return False, ssh, err_msg    
-    except Exception as exc:
-        err_msg = "Failed to connect"+str(exc) 
-        return False, ssh, err_msg    
-        
-    return True, ssh, "Ok"
+        ssh = None
+        err_msg = None
+        try:
+            ssh = paramiko.SSHClient()
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            ssh.connect(hostname, 22, "user", "user")
+        except paramiko.AuthenticationException:
+            err_msg = "Authentication failed when connecting" 
+            return False, ssh, err_msg    
+        except Exception as exc:
+            err_msg = "Failed to connect"+str(exc) 
+            return False, ssh, err_msg    
+            
+        return True, ssh, "Ok"
     
     
     
