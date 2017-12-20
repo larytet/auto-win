@@ -257,40 +257,41 @@
                     <Description>Disable password expiration for 'user'</Description>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <CommandLine>cmd.exe /c sleep 1</CommandLine>
-                    <Order>25</Order>
-                    <Description>Send ping to the host. I need the IP address in the host ARP table</Description>
-                </SynchronousCommand>
-                <SynchronousCommand wcm:action="add">
                     <CommandLine>cmd.exe /c copy /Y "a:\pinghost.bat" "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\pinghost.bat"</CommandLine>
-                    <Order>26</Order>
+                    <Order>25</Order>
                     <Description>Send ping to the host after boot. I need the IP address in the host ARP table</Description>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>cmd.exe /c netsh advfirewall firewall add rule name="ICMP Allow incoming V4 echo request" protocol=icmpv4:8,any dir=in action=allow</CommandLine>
-                    <Order>27</Order>
+                    <Order>26</Order>
                     <Description>Allow icoming pings</Description>
                 </SynchronousCommand>
                 <!-- WITHOUT WINDOWS UPDATES -->
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>cmd.exe /c C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -File a:\cygwin.ps1</CommandLine>
                     <Description>Download Cygwin</Description>
-                    <Order>95</Order>
+                    <Order>94</Order>
                     <RequiresUserInput>true</RequiresUserInput>
                 </SynchronousCommand>
                <SynchronousCommand wcm:action="add">
                     <CommandLine>%SystemRoot%\System32\reg.exe ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v EnableLUA /t REG_DWORD /d 1 /f</CommandLine>
                     <Description>Enable UAC</Description>
-                    <Order>96</Order>
+                    <Order>95</Order>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>cmd.exe /c C:\Users\user\Downloads\setup-x86.exe -q -R C:\cygwin -s http://mirrors.kernel.org/sourceware/cygwin -P "wget,screen,openssh,openssl,zip,unzip,procps-ng,rsync,vim,which,coreutils,bash,findutils,grep,zlib,tar" -a x86 -v -d -n -N</CommandLine>
                     <Description>Install Cygwin</Description>
-                    <Order>97</Order>
+                    <Order>96</Order>
                     <RequiresUserInput>true</RequiresUserInput>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>cmd.exe /c C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -File a:\setup_ssh.ps1 -AutoStart</CommandLine>
+                    <Description>Install OpenSSH</Description>
+                    <Order>97</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c C:\Users\User\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\start_screen.cmd</CommandLine>
                     <Description>Install OpenSSH</Description>
                     <Order>98</Order>
                     <RequiresUserInput>true</RequiresUserInput>
