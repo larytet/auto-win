@@ -259,11 +259,12 @@ class TestInstallVm:
             host, target_platform = hosts.pop()
             ssh = utils.SSH("user", "user")
             res, err_msg = ssh.connect(host)
+            target_platform["err_msg"] = err_msg
             if not res:
                 hosts.append(host)
-                target_platform["err_msg"] = err_msg
             else:
                 target_platform["ssh"] = ssh
+                
             time.sleep(1.0)
 
         assert len(hosts) == 0, "Failed to connect with SSH to "+str(hosts)
