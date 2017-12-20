@@ -3,7 +3,9 @@ Write-Output "Configuring firewall"
 netsh advfirewall firewall add rule name="SSH port 22" dir=in action=allow protocol=TCP localport=22
 netsh advfirewall firewall add rule name="SSH port 22" dir=out action=allow protocol=TCP localport=22
 
-  
+
+
+
 $StartScreenBat = @"
 @echo off 
 C:
@@ -23,4 +25,3 @@ cygrunsrv -S sshd
 screen -dmS `"main`"
 "@
 $StartScreenSh | Out-File -FilePath "C:\cygwin\home\user\start_screen.sh" -Encoding ASCII
-
