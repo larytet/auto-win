@@ -114,7 +114,7 @@ def find_ip_by_mac(macaddress):
     return False, None, None 
 
 class SSH:
-    def __init(self, username, password):
+    def __init__(self, username, password):
         self.username, self.password = username, password
         self.ssh = None
     
