@@ -260,10 +260,12 @@ class TestInstallVm:
         while (datetime.datetime.now() < time_end):
             if not len(hosts):
                 break
-            host = hosts[0]
+            host = hosts.pop()
             res, _, _ = utils.connect_ssh(host)
-            if res:
-                hosts.pop()
+            if not res:
+                hosts.append(host)
             time.sleep(1.0)
 
         assert len(hosts) == 0, "Failed to connect with SSH to "+str(hosts)
+
+    

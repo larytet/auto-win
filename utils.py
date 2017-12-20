@@ -112,7 +112,14 @@ def find_ip_by_mac(macaddress):
         if m:
             return True, m.group(1), m.group(2)
     return False, None, None 
+
+class SSH():
+    def __init(self, username, password):
+        self.username, self.password = username, password
+        self.ssh = None
     
+    def connect(self, hostname):
+             
 def connect_ssh(hostname):
     ssh = None
     err_msg = None
