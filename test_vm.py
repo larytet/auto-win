@@ -12,6 +12,7 @@ import datetime
 import virtualbox_shell
 import shutil
 from PIL.JpegPresets import presets
+import conftest
 
 class TestInstallVm:
     '''
@@ -269,8 +270,12 @@ class TestInstallVm:
 
         assert len(hosts) == 0, "Failed to connect with SSH to "+str(hosts)
 
-    def test_shutdown_all(self, target_platforms):
-        for target_platform in target_platforms:
+
+    @classmethod
+    def teardown_class(cls):
+        for target_platform in conftest.TargetPlatforms:
+            if not "ssh" in target_platform:
+                continue
             ssh = target_platform["ssh"]
             os_name = target_platform["os_name"]
             ssh.shutdown_os(os_name)
