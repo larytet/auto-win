@@ -234,7 +234,7 @@ class TestInstallVm:
             uuids_macs[machine.uuid] = (mac, machine.name)
         print(f"Waiting for ping from {uuids_macs}")
         time_end = datetime.datetime.now() + datetime.timedelta(minutes=20)
-        while len(uuids_macs) or (datetime.datetime.now() < time_end):
+        while len(uuids_macs) and (datetime.datetime.now() < time_end):
             uuid = next(iter(uuids_macs))
             mac, machine_name = uuids_macs[uuid]
             res, hostname, ipaddress = utils.find_ip_by_mac(mac)
@@ -255,12 +255,13 @@ class TestInstallVm:
         print(f"Waiting for SSH server")
         # I need ~2-3 minutes for Cygwin download and SSH server installation
         time_end = datetime.datetime.now() + datetime.timedelta(minutes=5)
-        while len(hosts) or (datetime.datetime.now() < time_end):
+        while len(hosts) and (datetime.datetime.now() < time_end):
             host, target_platform = hosts.pop()
             ssh = utils.SSH("user", "user")
-            res, _ = ssh.connect(host)
+            res, err_msg = ssh.connect(host)
             if not res:
                 hosts.append(host)
+                target_platform["err_msg"] = err_msg
             else:
                 target_platform["ssh"] = ssh
             time.sleep(1.0)
