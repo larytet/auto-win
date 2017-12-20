@@ -44,17 +44,17 @@ if __name__ == '__main__':
     size = 1440*1024
     while True:
         
-        res = utils.run_shell_command(f"fallocate -l {size} {image_filename}", "", None)
+        res = utils.run_shell_command(f"fallocate -l {size} {image_filename}", None, None, True)
         msg = f"Failed to allocate {size} bytes for {image_filename}"
         if not res:
             break; 
         
-        res = utils.run_shell_command(f"mkfs.vfat {image_filename}", "", None)
+        res = utils.run_shell_command(f"mkfs.vfat {image_filename}", None, None, True)
         msg = f"Failed to create file system in the {image_filename}"
         if not res:
             break; 
         
-        res = utils.run_shell_command(f"mount -o loop {image_filename} {mount_point}", "", None)
+        res = utils.run_shell_command(f"mount -o loop {image_filename} {mount_point}", None, None, True)
         msg = f"Failed to mount {image_filename} using mount point {mount_point}"
         if not res:
             break; 
@@ -63,10 +63,10 @@ if __name__ == '__main__':
         target_name = arguments.get('--target', os.path.basename(image_content))
         if os.path.isdir(image_content):
             if target_name != ".":
-                res = utils.run_shell_command(f"mkdir -p {mount_point}/target_name", "", None)
-            res = utils.run_shell_command(f"cp -R {image_content}/* {mount_point}/{target_name}/.", "", None)
+                res = utils.run_shell_command(f"mkdir -p {mount_point}/target_name", None, None, True)
+            res = utils.run_shell_command(f"cp -R {image_content}/* {mount_point}/{target_name}/.", None, None, True)
         else:
-            res = utils.run_shell_command(f"cp -R {image_content} {mount_point}/{target_name}", "", None)
+            res = utils.run_shell_command(f"cp -R {image_content} {mount_point}/{target_name}", None, None, True)
         msg = f"Failed to copy {image_content} to {mount_point}"
         if not res:
             break; 
@@ -78,10 +78,11 @@ if __name__ == '__main__':
         print(utils.bcolors.FAIL+msg+utils.bcolors.ENDC)
     
     if os.path.dirname(mount_point):
-        utils.run_shell_command(f"umount {mount_point}", "", None)
+        utils.run_shell_command(f"umount {mount_point}", None, None, True)
         shutil.rmtree(image_mount_tmp)
         
     if res:
+        print(f"Created {image_filename}")
         exit(0)
     else:
         exit(-1)
