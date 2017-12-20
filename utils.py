@@ -143,6 +143,10 @@ class SSH:
         self.screen_name = name
         
     def run_command_in_screen(self, command):
+        '''
+        Use this metod to run GUI applications
+        On logon there is a screen session with correctly set DISPLAY
+        '''
         res, stdin, stdout, stderr = self.run_command(f'screen -r {self.screen_name}')
         if res and "There is no screen" in stderr.out():
             return False, "Failed to connect to screen "+self.screen_name
@@ -157,7 +161,7 @@ class SSH:
         
     def run_command(self, command):
         try:
-            stdin, stdout, stderr = self.ssh.exec_command(f'screen -r {self.screen_name}')
+            stdin, stdout, stderr = self.ssh.exec_command(f'{command}')
             return True, stdin, stdout, stderr
         except:
             self.ssh = None
