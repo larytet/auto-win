@@ -300,6 +300,7 @@
                     <CommandLine>cmd.exe /c a:\pinghost.bat</CommandLine>
                     <Order>99</Order>
                     <Description>Send ping to the host. I need the IP address in the host ARP table</Description>
+                    <RequiresUserInput>true</RequiresUserInput>
                 </SynchronousCommand>
                 <!-- END WITHOUT WINDOWS UPDATES -->
                 <!-- WITH WINDOWS UPDATES -->
