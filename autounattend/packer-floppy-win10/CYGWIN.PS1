@@ -16,6 +16,7 @@ Write-Output "Downloading $cygwin_download_url"
 $StartScreenBat = @"
 @echo off 
 C:
+mkdir C:\cygwin\home\user
 chdir C:\cygwin\bin
 bash --login -i "/home/user/start_screen.sh"
 "@
