@@ -255,7 +255,8 @@ class TestInstallVm:
             hosts.append(target_platform["ipaddress"])
             
         print(f"Waiting for SSH server")
-        time_end = datetime.datetime.now() + datetime.timedelta(minutes=1)
+        # I need ~2-3 minutes for Cygwin download and SSH server installation
+        time_end = datetime.datetime.now() + datetime.timedelta(minutes=5)
         while (datetime.datetime.now() < time_end):
             if not len(hosts):
                 break
