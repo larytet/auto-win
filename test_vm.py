@@ -252,7 +252,7 @@ class TestInstallVm:
     def test_wait_for_ssh(self, target_platforms):
         hosts = []
         for target_platform in target_platforms:
-            hosts.append(target_platform["ipaddress"])
+            hosts.append((target_platform, target_platform["ipaddress"]))
             
         print(f"Waiting for SSH server")
         # I need ~2-3 minutes for Cygwin download and SSH server installation
@@ -260,10 +260,13 @@ class TestInstallVm:
         while (datetime.datetime.now() < time_end):
             if not len(hosts):
                 break
-            host = hosts.pop()
-            res, _, _ = utils.connect_ssh(host)
+            host, target_platform = hosts.pop()
+            ssh = utils.SSH("user", "user")
+            res, _, _ = ssh.connect(host)
             if not res:
                 hosts.append(host)
+            else:
+                target_platform["ssh"] = ssh
             time.sleep(1.0)
 
         assert len(hosts) == 0, "Failed to connect with SSH to "+str(hosts)

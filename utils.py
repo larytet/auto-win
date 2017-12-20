@@ -113,13 +113,13 @@ def find_ip_by_mac(macaddress):
             return True, m.group(1), m.group(2)
     return False, None, None 
 
-class SSH():
+class SSH:
     def __init(self, username, password):
         self.username, self.password = username, password
         self.ssh = None
     
     def connect(self, hostname):
-        ssh = None
+        self.ssh = None
         err_msg = None
         try:
             ssh = paramiko.SSHClient()
@@ -127,12 +127,30 @@ class SSH():
             ssh.connect(hostname, 22, "user", "user")
         except paramiko.AuthenticationException:
             err_msg = "Authentication failed when connecting" 
-            return False, ssh, err_msg    
+            return False, err_msg    
         except Exception as exc:
             err_msg = "Failed to connect"+str(exc) 
-            return False, ssh, err_msg    
+            return False, err_msg    
             
-        return True, ssh, "Ok"
+        self.ssh = ssh
+        return True, "Ok"
+
+    def get(self):
+        return self.ssh
     
+    def set_screen_name(self, name):
+        self.screen_name = name
+        
+    def run_command_in_screen(self, command):
+        stdin, stdout, stderr = self.ssh.exec_command(f'screen -r {self.screen_name}')
+        if "There is no screen" in stderr.out():
+            return False, "Failed to connect to screen "+self.screen_name
+        try:
+            stdin, stdout, stderr = self.ssh.exec_command(command)
+        except:
+            pass
+        finally:
+            pass
+        
     
     
