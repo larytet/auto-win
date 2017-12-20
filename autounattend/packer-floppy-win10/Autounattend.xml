@@ -117,6 +117,7 @@
                 </Password>
                 <Username>user</Username>
                 <Enabled>true</Enabled>
+		<LogonCount>100000</LogonCount>
             </AutoLogon>
             <FirstLogonCommands>
                 <SynchronousCommand wcm:action="add">
