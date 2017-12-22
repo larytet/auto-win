@@ -270,16 +270,22 @@
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>cmd.exe /c C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -File a:\cygwin.ps1</CommandLine>
                     <Description>Download Cygwin</Description>
-                    <Order>94</Order>
+                    <Order>93</Order>
                     <RequiresUserInput>true</RequiresUserInput>
                 </SynchronousCommand>
                <SynchronousCommand wcm:action="add">
                     <CommandLine>%SystemRoot%\System32\reg.exe ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v EnableLUA /t REG_DWORD /d 1 /f</CommandLine>
                     <Description>Enable UAC</Description>
-                    <Order>95</Order>
+                    <Order>94</Order>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>cmd.exe /c C:\Users\user\Downloads\setup-x86.exe -q -R C:\cygwin -s http://mirrors.kernel.org/sourceware/cygwin -P "wget,screen,openssh,openssl,zip,unzip,procps-ng,rsync,vim,which,coreutils,bash,findutils,grep,zlib,tar" -a x86 -v -d -n -N</CommandLine>
+                    <Description>Install Cygwin</Description>
+                    <Order>95</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c C:\Users\user\Downloads\firefox-installer.exe -ms</CommandLine>
                     <Description>Install Cygwin</Description>
                     <Order>96</Order>
                     <RequiresUserInput>true</RequiresUserInput>

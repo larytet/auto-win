@@ -152,21 +152,17 @@ class SSH:
             return False, "Failed to connect to screen "+self.screen_name
         if not res:
             return False, "Connectiton to "+self.hostname+ " failed"
-        try:
-            stdin, stdout, stderr = self.ssh.exec_command(command)
-        except:
-            pass
-        finally:
-            pass
+        res, stdin, stdout, stderr = self.run_command(command)
+        return res, (stdin, stdout, stderr)
         
     def run_command(self, command):
         try:
             stdin, stdout, stderr = self.ssh.exec_command(f'{command}')
-            return True, stdin, stdout, stderr
+            return True, (stdin, stdout, stderr)
         except:
             self.ssh = None
             self.hostname = None
-            return False, None, None, None
+            return False, (None, None, None)
     
     def shutdown_os(self, os_name):
         '''
